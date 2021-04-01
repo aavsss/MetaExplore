@@ -2,8 +2,8 @@ package com.aavashsthapit.myapplication.adapters
 
 import androidx.recyclerview.widget.AsyncListDiffer
 import com.aavashsthapit.myapplication.R
+import com.aavashsthapit.myapplication.databinding.ListItemBinding
 import com.bumptech.glide.RequestManager
-import kotlinx.android.synthetic.main.list_item.view.*
 import javax.inject.Inject
 
 class StreamersAdapter @Inject constructor(
@@ -14,16 +14,20 @@ class StreamersAdapter @Inject constructor(
 
     override fun onBindViewHolder(holder: StreamerViewHolder, position: Int) {
         val streamer = streamers[position]
-        holder.itemView.apply {
-            tv_name.text = streamer.name
-            tv_category.text = streamer.category
-            glide.load(streamer.image).into(iv_streamer_img)
+        val binding = ListItemBinding.bind(holder.itemView)
+        binding.apply {
+            tvName.text = streamer.name
+            tvCategory.text = streamer.category
+            glide.load(streamer.image).into(ivStreamerImg)
+        }
 
+        holder.itemView.apply {
             setOnClickListener {
                 onItemClickListener?.let { click ->
                     click(streamer)
                 }
             }
         }
+
     }
 }

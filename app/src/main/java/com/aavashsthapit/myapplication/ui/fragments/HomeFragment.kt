@@ -8,9 +8,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aavashsthapit.myapplication.R
 import com.aavashsthapit.myapplication.adapters.StreamersAdapter
+import com.aavashsthapit.myapplication.databinding.FragmentHomeBinding
 import com.aavashsthapit.myapplication.ui.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -21,26 +21,29 @@ class HomeFragment : Fragment(R.layout.fragment_home){
     @Inject
     lateinit var streamersAdapter: StreamersAdapter
 
+    lateinit var binding: FragmentHomeBinding
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentHomeBinding.bind(view) //viewBinding
         mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
         setupRecyclerView()
-        subscribeToFakeRepo()
+        subscribeStreamAdapterToFakeRepo()
 
         streamersAdapter.setItemClickListener {
             Toast.makeText(requireContext(), it.name, Toast.LENGTH_SHORT).show()
         }
 
         //Filter based on search query
-        sv_search_streamers.setOnQueryTextListener(mainViewModel.searchCallback)
+        binding.svSearchStreamers.setOnQueryTextListener(mainViewModel.searchCallback)
     }
 
-    private fun setupRecyclerView() = rv_all_streamers.apply {
+    private fun setupRecyclerView() = binding.rvAllStreamers.apply {
         adapter = streamersAdapter
         layoutManager = LinearLayoutManager(requireContext())
     }
 
-    private fun subscribeToFakeRepo(){
+    private fun subscribeStreamAdapterToFakeRepo(){
         mainViewModel.streamers.observe(viewLifecycleOwner) {
             streamersAdapter.streamers = it
         }
