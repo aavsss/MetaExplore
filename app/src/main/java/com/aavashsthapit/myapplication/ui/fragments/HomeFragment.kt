@@ -5,9 +5,11 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aavashsthapit.myapplication.R
 import com.aavashsthapit.myapplication.adapters.StreamersAdapter
+import com.aavashsthapit.myapplication.data.repo.FakeRepo
 import com.aavashsthapit.myapplication.databinding.FragmentHomeBinding
 import com.aavashsthapit.myapplication.ui.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,7 +33,10 @@ class HomeFragment : Fragment(R.layout.fragment_home){
         subscribeStreamAdapterToFakeRepo()
 
         streamersAdapter.setItemClickListener {
-            Toast.makeText(requireContext(), it.name, Toast.LENGTH_SHORT).show()
+            mainViewModel.setCurrentStreamer(it)
+            findNavController().navigate(
+                R.id.action_homeFragment_to_detailFragment
+            )
         }
 
         //Filter based on search query

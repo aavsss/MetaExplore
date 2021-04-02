@@ -17,6 +17,9 @@ class MainViewModel @Inject constructor(
     private val _streamers = MutableLiveData<List<TwitchStreamer>>()
     val streamers : LiveData<List<TwitchStreamer>> = _streamers
 
+    private val _currentStreamer = MutableLiveData<TwitchStreamer>()
+    val currentStreamer : LiveData<TwitchStreamer> = _currentStreamer
+
     init {
         _streamers.postValue(fakeRepo.streamers)
     }
@@ -40,5 +43,9 @@ class MainViewModel @Inject constructor(
             }
             return false
         }
+    }
+
+    fun setCurrentStreamer(streamer : TwitchStreamer){
+        _currentStreamer.postValue(streamer)
     }
 }
