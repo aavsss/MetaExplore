@@ -11,6 +11,11 @@ import com.bumptech.glide.RequestManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+/**
+ * Uses ViewBinding
+ * Uses mainViewModel
+ * Sets up detail views
+ */
 @AndroidEntryPoint
 class DetailFragment : Fragment(R.layout.fragment_detail) {
 

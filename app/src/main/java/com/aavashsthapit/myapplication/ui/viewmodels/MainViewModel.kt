@@ -10,6 +10,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.*
 import javax.inject.Inject
 
+/**
+ * Business logic
+ * Logic for searchCallback
+ * sets currentStreamer for DetailView
+ */
 @HiltViewModel
 class MainViewModel @Inject constructor(
     fakeRepo: FakeRepo

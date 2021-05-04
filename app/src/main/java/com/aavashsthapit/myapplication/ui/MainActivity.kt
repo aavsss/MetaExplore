@@ -6,6 +6,9 @@ import com.aavashsthapit.myapplication.R
 import com.aavashsthapit.myapplication.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * Setting up Fragments
+ */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 

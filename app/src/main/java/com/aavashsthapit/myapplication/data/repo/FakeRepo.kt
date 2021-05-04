@@ -3,6 +3,10 @@ package com.aavashsthapit.myapplication.data.repo
 import com.aavashsthapit.myapplication.R
 import com.aavashsthapit.myapplication.data.entity.TwitchStreamer
 
+/**
+ * Fake Repo until backend is connected
+ * List of data class TwitchStreamers
+ */
 object FakeRepo {
 
     val streamers = listOf(

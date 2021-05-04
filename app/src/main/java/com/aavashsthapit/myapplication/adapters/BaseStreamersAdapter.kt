@@ -8,6 +8,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.aavashsthapit.myapplication.data.entity.TwitchStreamer
 
+/**
+ * Class to be inherited
+ * Handles diffCallback : Checks weather the elements in the list is same or not
+ * Abstracted differ
+ * Instantiated streamers here
+ * Bare bones for onclick listener
+ */
 abstract class BaseStreamersAdapter(
     private val layoutId: Int
 ) : RecyclerView.Adapter<BaseStreamersAdapter.StreamerViewHolder>(){

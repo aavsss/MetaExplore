@@ -15,6 +15,15 @@ import com.aavashsthapit.myapplication.ui.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+/**
+ * Uses ViewBinding
+ * Uses mainViewModel
+ * Sets up Home Fragment with recyclerView and
+ *         streamersAdapter
+ * Uses onClickListener here where data is provided from StreamersAdapter
+ * Uses setOnTextChangeQueryListener for search feature
+ * streamersAdapter.streamers instantiated here in subScribeToFakeRepo
+ */
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home){
 

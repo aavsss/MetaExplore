@@ -17,6 +17,11 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Module provides instance of:
+ * 1. FakeRepo
+ * 2. Glide
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
