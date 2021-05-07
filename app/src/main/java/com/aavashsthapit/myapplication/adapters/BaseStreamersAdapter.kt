@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.aavashsthapit.myapplication.data.entity.Streamer
 import com.aavashsthapit.myapplication.data.entity.TwitchStreamer
 
 /**
@@ -21,19 +22,19 @@ abstract class BaseStreamersAdapter(
 
     class StreamerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
-    protected val diffCallback = object : DiffUtil.ItemCallback<TwitchStreamer>() {
-        override fun areItemsTheSame(oldItem: TwitchStreamer, newItem: TwitchStreamer): Boolean {
-            return oldItem.name == newItem.name
+    protected val diffCallback = object : DiffUtil.ItemCallback<Streamer>() {
+        override fun areItemsTheSame(oldItem: Streamer, newItem: Streamer): Boolean {
+            return oldItem.display_name == newItem.display_name
         }
 
-        override fun areContentsTheSame(oldItem: TwitchStreamer, newItem: TwitchStreamer): Boolean {
+        override fun areContentsTheSame(oldItem: Streamer, newItem: Streamer): Boolean {
             return oldItem.hashCode() == newItem.hashCode()
         }
     }
 
-    protected abstract val differ: AsyncListDiffer<TwitchStreamer>
+    protected abstract val differ: AsyncListDiffer<Streamer>
 
-    var streamers: List<TwitchStreamer>
+    var streamers: List<Streamer>
         get() = differ.currentList
         set(value) = differ.submitList(value)
 
@@ -47,9 +48,9 @@ abstract class BaseStreamersAdapter(
         )
     }
 
-    protected var onItemClickListener: ((TwitchStreamer) -> Unit)? = null
+    protected var onItemClickListener: ((Streamer) -> Unit)? = null
 
-    fun setItemClickListener(listener: (TwitchStreamer) -> Unit) {
+    fun setItemClickListener(listener: (Streamer) -> Unit) {
         onItemClickListener = listener
     }
 

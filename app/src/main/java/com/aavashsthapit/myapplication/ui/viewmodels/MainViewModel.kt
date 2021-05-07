@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aavashsthapit.myapplication.api.TwitchStreamersApi
+import com.aavashsthapit.myapplication.data.entity.Streamer
 import com.aavashsthapit.myapplication.data.entity.TwitchStreamer
 import com.aavashsthapit.myapplication.data.repo.FakeRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,22 +21,19 @@ import javax.inject.Inject
  * Business logic
  * Logic for searchCallback
  * sets currentStreamer for DetailView
+ * Performs an HTTPS request to get current valorant streamers. NOTE: Need to use NGROK for now
  */
 const val TAG = "MainViewModel"
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    fakeRepo: FakeRepo,
+    val fakeRepo: FakeRepo,
 ) : ViewModel() {
-    private val _streamers = MutableLiveData<List<TwitchStreamer>>()
-    val streamers : LiveData<List<TwitchStreamer>> = _streamers
+    private val _streamers = MutableLiveData<List<Streamer>>()
+    val streamers : LiveData<List<Streamer>> = _streamers
 
-    private val _currentStreamer = MutableLiveData<TwitchStreamer>()
-    val currentStreamer : LiveData<TwitchStreamer> = _currentStreamer
-
-    init {
-        _streamers.postValue(fakeRepo.streamers)
-    }
+    private val _currentStreamer = MutableLiveData<Streamer>()
+    val currentStreamer : LiveData<Streamer> = _currentStreamer
 
     val searchCallback = object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String?): Boolean {
@@ -46,7 +44,7 @@ class MainViewModel @Inject constructor(
             if (newText != null) {
                 if (newText.isNotEmpty()){
                     val tempList = fakeRepo.streamers.filter {
-                        it.name.toLowerCase(Locale.ROOT).contains(newText.toLowerCase(Locale.ROOT))
+                        it.display_name.toLowerCase(Locale.ROOT).contains(newText.toLowerCase(Locale.ROOT))
                     }
                     _streamers.postValue(tempList)
                 }else{
@@ -58,12 +56,11 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun setCurrentStreamer(streamer : TwitchStreamer){
+    fun setCurrentStreamer(streamer : Streamer){
         _currentStreamer.postValue(streamer)
     }
 
     fun sendHttpRequest(twitchStreamersApi: TwitchStreamersApi){
-        Log.v("asda", "/// $twitchStreamersApi")
         viewModelScope.launch {
             val response = try {
                 twitchStreamersApi.getTwitchStreamers()
@@ -75,7 +72,9 @@ class MainViewModel @Inject constructor(
                 return@launch
             }
             if(response.isSuccessful && response.body() != null) {
-                Log.v("asda", "///${response.body()}")
+                Log.v(TAG, "///${response.body()}")
+                fakeRepo.streamers = response.body()!!.data
+                _streamers.postValue(fakeRepo.streamers)
             }else{
                 Log.e(TAG, "Response not successful")
             }

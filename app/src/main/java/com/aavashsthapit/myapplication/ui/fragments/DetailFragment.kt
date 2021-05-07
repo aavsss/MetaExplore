@@ -36,9 +36,9 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
     private fun setupViews(){
         mainViewModel.currentStreamer.observe(viewLifecycleOwner) {
             binding.apply {
-                tvName.text = it.name
-                tvCategory.text = it.category
-                glide.load(it.image).into(ivStreamerImg)
+                tvName.text = it.display_name
+                tvCategory.text = it.game_name
+                glide.load(it.thumbnail_url).into(ivStreamerImg)
             }
         }
     }

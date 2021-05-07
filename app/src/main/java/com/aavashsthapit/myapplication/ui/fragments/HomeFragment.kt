@@ -53,7 +53,6 @@ class HomeFragment : Fragment(R.layout.fragment_home){
         }
 
         //Make HTTPS request
-        Log.v("asda", "///Random")
         mainViewModel.sendHttpRequest(twitchStreamersApi)
         //Filter based on search query
         binding.svSearchStreamers.setOnQueryTextListener(mainViewModel.searchCallback)
@@ -68,6 +67,7 @@ class HomeFragment : Fragment(R.layout.fragment_home){
     private fun subscribeStreamAdapterToFakeRepo(){
         mainViewModel.streamers.observe(viewLifecycleOwner) {
             streamersAdapter.streamers = it
+            binding.allStreamersProgressBar.visibility = View.GONE
         }
     }
 }

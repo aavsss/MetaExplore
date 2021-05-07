@@ -23,9 +23,9 @@ class StreamersAdapter @Inject constructor(
         val streamer = streamers[position]
         val binding = ListItemBinding.bind(holder.itemView)
         binding.apply {
-            tvName.text = streamer.name
-            tvCategory.text = streamer.category
-            glide.load(streamer.image).into(ivStreamerImg)
+            tvName.text = streamer.display_name
+            tvCategory.text = streamer.game_name
+            glide.load(streamer.thumbnail_url).into(ivStreamerImg)
         }
 
         holder.itemView.apply {
