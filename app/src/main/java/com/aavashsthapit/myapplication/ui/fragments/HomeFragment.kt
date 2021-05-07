@@ -1,6 +1,7 @@
 package com.aavashsthapit.myapplication.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -9,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aavashsthapit.myapplication.R
 import com.aavashsthapit.myapplication.adapters.StreamersAdapter
+import com.aavashsthapit.myapplication.api.TwitchStreamersApi
 import com.aavashsthapit.myapplication.data.repo.FakeRepo
 import com.aavashsthapit.myapplication.databinding.FragmentHomeBinding
 import com.aavashsthapit.myapplication.ui.viewmodels.MainViewModel
@@ -31,6 +33,8 @@ class HomeFragment : Fragment(R.layout.fragment_home){
 
     @Inject
     lateinit var streamersAdapter: StreamersAdapter
+    @Inject
+    lateinit var twitchStreamersApi: TwitchStreamersApi
 
     lateinit var binding: FragmentHomeBinding
 
@@ -48,8 +52,12 @@ class HomeFragment : Fragment(R.layout.fragment_home){
             )
         }
 
+        //Make HTTPS request
+        Log.v("asda", "///Random")
+        mainViewModel.sendHttpRequest(twitchStreamersApi)
         //Filter based on search query
         binding.svSearchStreamers.setOnQueryTextListener(mainViewModel.searchCallback)
+
     }
 
     private fun setupRecyclerView() = binding.rvAllStreamers.apply {
