@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.aavashsthapit.myapplication.data.entity.Streamer
-import com.aavashsthapit.myapplication.data.entity.TwitchStreamer
 
 /**
  * Class to be inherited

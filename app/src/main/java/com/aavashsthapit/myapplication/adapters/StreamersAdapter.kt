@@ -1,5 +1,6 @@
 package com.aavashsthapit.myapplication.adapters
 
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.AsyncListDiffer
 import com.aavashsthapit.myapplication.R
 import com.aavashsthapit.myapplication.databinding.ListItemBinding
@@ -25,6 +26,7 @@ class StreamersAdapter @Inject constructor(
         binding.apply {
             tvName.text = streamer.display_name
             tvCategory.text = streamer.game_name
+            tvIsLive.isVisible = streamer.is_live
             glide.load(streamer.thumbnail_url).into(ivStreamerImg)
         }
 

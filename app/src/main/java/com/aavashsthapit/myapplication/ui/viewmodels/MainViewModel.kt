@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aavashsthapit.myapplication.api.TwitchStreamersApi
 import com.aavashsthapit.myapplication.data.entity.Streamer
-import com.aavashsthapit.myapplication.data.entity.TwitchStreamer
 import com.aavashsthapit.myapplication.data.repo.FakeRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -34,6 +33,8 @@ class MainViewModel @Inject constructor(
 
     private val _currentStreamer = MutableLiveData<Streamer>()
     val currentStreamer : LiveData<Streamer> = _currentStreamer
+
+    lateinit var listener: (() -> Unit)
 
     val searchCallback = object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String?): Boolean {
@@ -66,9 +67,13 @@ class MainViewModel @Inject constructor(
                 twitchStreamersApi.getTwitchStreamers()
             } catch (e : IOException) {
                 Log.e(TAG, "IOException, you might not have internet connection ${e.localizedMessage}")
+                listener.invoke()
+                _streamers.postValue(fakeRepo.testStreamers)
                 return@launch
             } catch (e : HttpException) {
                 Log.e(TAG, "HttpException, unexpected response")
+                listener.invoke()
+                _streamers.postValue(fakeRepo.testStreamers)
                 return@launch
             }
             if(response.isSuccessful && response.body() != null) {
@@ -76,6 +81,8 @@ class MainViewModel @Inject constructor(
                 fakeRepo.streamers = response.body()!!.data
                 _streamers.postValue(fakeRepo.streamers)
             }else{
+                listener.invoke()
+                _streamers.postValue(fakeRepo.testStreamers)
                 Log.e(TAG, "Response not successful")
             }
         }

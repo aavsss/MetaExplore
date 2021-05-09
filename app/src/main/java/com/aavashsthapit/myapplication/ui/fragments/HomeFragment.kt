@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -54,6 +55,10 @@ class HomeFragment : Fragment(R.layout.fragment_home){
 
         //Make HTTPS request
         mainViewModel.sendHttpRequest(twitchStreamersApi)
+        //If the connection is not made
+        mainViewModel.listener = {
+            binding.allStreamersProgressBar.isVisible = false
+        }
         //Filter based on search query
         binding.svSearchStreamers.setOnQueryTextListener(mainViewModel.searchCallback)
 
