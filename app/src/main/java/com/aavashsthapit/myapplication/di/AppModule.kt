@@ -47,8 +47,8 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideRetrofitInstance() = Retrofit.Builder()
-        .baseUrl(" https://3f29cb2106b8.ngrok.io")
+    fun provideRetrofitInstance(): TwitchStreamersApi = Retrofit.Builder()
+        .baseUrl("https://meta-explore.herokuapp.com/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(TwitchStreamersApi::class.java)

@@ -53,7 +53,6 @@ class HomeFragment : Fragment(R.layout.fragment_home){
             )
         }
 
-        //Make HTTPS request
         mainViewModel.sendHttpRequest(twitchStreamersApi)
         //If the connection is not made
         mainViewModel.listener = {
