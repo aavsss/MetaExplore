@@ -9,6 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.aavashsthapit.myapplication.api.TwitchStreamersApi
 import com.aavashsthapit.myapplication.data.entity.Streamer
 import com.aavashsthapit.myapplication.data.repo.FakeRepo
+import com.aavashsthapit.myapplication.other.Event
+import com.aavashsthapit.myapplication.other.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -28,11 +30,11 @@ const val TAG = "MainViewModel"
 class MainViewModel @Inject constructor(
     val fakeRepo: FakeRepo,
 ) : ViewModel() {
-    private val _streamers = MutableLiveData<List<Streamer>>()
-    val streamers : LiveData<List<Streamer>> = _streamers
+    private val _streamers = MutableLiveData<Resource<List<Streamer>>>()
+    val streamers : LiveData<Resource<List<Streamer>>> = _streamers
 
-    private val _currentStreamer = MutableLiveData<Streamer>()
-    val currentStreamer : LiveData<Streamer> = _currentStreamer
+    private val _currentStreamer = MutableLiveData<Resource<Streamer>>()
+    val currentStreamer : LiveData<Resource<Streamer>> = _currentStreamer
 
     lateinit var listener: (() -> Unit)
 
@@ -47,10 +49,10 @@ class MainViewModel @Inject constructor(
                     val tempList = fakeRepo.streamers.filter {
                         it.display_name.toLowerCase(Locale.ROOT).contains(newText.toLowerCase(Locale.ROOT))
                     }
-                    _streamers.postValue(tempList)
+                    _streamers.postValue(Resource.success(tempList))
                 }else{
                     //Show all
-                    _streamers.postValue(fakeRepo.streamers)
+                    _streamers.postValue(Resource.success(fakeRepo.streamers))
                 }
             }
             return false
@@ -58,7 +60,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun setCurrentStreamer(streamer : Streamer){
-        _currentStreamer.postValue(streamer)
+        _currentStreamer.postValue(Resource.success(streamer))
     }
 
     fun sendHttpRequest(twitchStreamersApi: TwitchStreamersApi){
@@ -68,21 +70,27 @@ class MainViewModel @Inject constructor(
             } catch (e : IOException) {
                 Log.e(TAG, "IOException, you might not have internet connection ${e.localizedMessage}")
                 listener.invoke()
-                _streamers.postValue(fakeRepo.testStreamers)
+                _streamers.postValue(Resource.success(fakeRepo.testStreamers))
                 return@launch
             } catch (e : HttpException) {
                 Log.e(TAG, "HttpException, unexpected response")
                 listener.invoke()
-                _streamers.postValue(fakeRepo.testStreamers)
+                _streamers.postValue(Resource.success(fakeRepo.testStreamers))
                 return@launch
             }
+
             if(response.isSuccessful && response.body() != null) {
                 Log.v(TAG, "///${response.body()}")
-                fakeRepo.streamers = response.body()!!.data
-                _streamers.postValue(fakeRepo.streamers)
+                response.body()?.data?.let {
+                    fakeRepo.streamers = it
+                    _streamers.postValue(Resource.success(it))
+                } ?: Resource.error("An unknown error occured", null)
+//                fakeRepo.streamers = response.body()!!.data
+//                _streamers.postValue(fakeRepo.streamers)
             }else{
                 listener.invoke()
-                _streamers.postValue(fakeRepo.testStreamers)
+                _streamers.postValue(Resource.success(fakeRepo.testStreamers))
+                Resource.error("An unknown error occured", null)
                 Log.e(TAG, "Response not successful")
             }
         }

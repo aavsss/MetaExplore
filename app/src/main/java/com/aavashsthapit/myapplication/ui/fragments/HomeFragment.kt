@@ -70,7 +70,7 @@ class HomeFragment : Fragment(R.layout.fragment_home){
 
     private fun subscribeStreamAdapterToFakeRepo(){
         mainViewModel.streamers.observe(viewLifecycleOwner) {
-            streamersAdapter.streamers = it
+            streamersAdapter.streamers = it.data!!
             binding.allStreamersProgressBar.visibility = View.GONE
         }
     }
