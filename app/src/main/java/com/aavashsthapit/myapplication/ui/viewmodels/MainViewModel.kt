@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.aavashsthapit.myapplication.api.TwitchStreamersApi
 import com.aavashsthapit.myapplication.data.entity.Streamer
 import com.aavashsthapit.myapplication.data.repo.FakeRepo
+import com.aavashsthapit.myapplication.other.Constants.TAG
 import com.aavashsthapit.myapplication.other.Event
 import com.aavashsthapit.myapplication.other.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +25,6 @@ import javax.inject.Inject
  * sets currentStreamer for DetailView
  * Performs an HTTPS request to get current valorant streamers. NOTE: Need to use NGROK for now
  */
-const val TAG = "MainViewModel"
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -84,13 +84,13 @@ class MainViewModel @Inject constructor(
                 response.body()?.data?.let {
                     fakeRepo.streamers = it
                     _streamers.postValue(Resource.success(it))
-                } ?: Resource.error("An unknown error occured", null)
+                } ?: Resource.error("An unknown error occurred", null)
 //                fakeRepo.streamers = response.body()!!.data
 //                _streamers.postValue(fakeRepo.streamers)
             }else{
                 listener.invoke()
                 _streamers.postValue(Resource.success(fakeRepo.testStreamers))
-                Resource.error("An unknown error occured", null)
+                Resource.error("An unknown error occurred", null)
                 Log.e(TAG, "Response not successful")
             }
         }

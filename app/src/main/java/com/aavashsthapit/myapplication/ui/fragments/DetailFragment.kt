@@ -38,7 +38,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
             binding.apply {
                 tvName.text = it.data?.display_name ?: "TenZ"
                 tvCategory.text = it.data?.game_name ?: "Valorant"
-                glide.load(it.data?.thumbnail_url).into(ivStreamerImg)
+                glide.load(it.data?.thumbnail_url ?: R.drawable.ic_cloud_off).into(ivStreamerImg)
             }
         }
     }
