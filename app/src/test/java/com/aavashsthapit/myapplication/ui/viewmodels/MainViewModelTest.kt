@@ -20,7 +20,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun `TenZ is the current streamer`() {
+    fun `TenZ is the current streamer`(){
         val tenZ = FakeRepo.testStreamers.first {
             it.display_name == "TenZ"
         }

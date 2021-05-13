@@ -64,34 +64,34 @@ class MainViewModel @Inject constructor(
     }
 
     fun sendHttpRequest(twitchStreamersApi: TwitchStreamersApi){
-        viewModelScope.launch {
-            val response = try {
-                twitchStreamersApi.getTwitchStreamers()
-            } catch (e : IOException) {
-                Log.e(TAG, "IOException, you might not have internet connection ${e.localizedMessage}")
-                listener.invoke()
-                _streamers.postValue(Resource.success(fakeRepo.testStreamers))
-                return@launch
-            } catch (e : HttpException) {
-                Log.e(TAG, "HttpException, unexpected response")
-                listener.invoke()
-                _streamers.postValue(Resource.success(fakeRepo.testStreamers))
-                return@launch
-            }
+        if(fakeRepo.streamers.isEmpty()){
+            viewModelScope.launch {
+                val response = try {
+                    twitchStreamersApi.getTwitchStreamers()
+                } catch (e : IOException) {
+                    Log.e(TAG, "IOException, you might not have internet connection ${e.localizedMessage}")
+                    listener.invoke()
+                    _streamers.postValue(Resource.success(fakeRepo.testStreamers))
+                    return@launch
+                } catch (e : HttpException) {
+                    Log.e(TAG, "HttpException, unexpected response")
+                    listener.invoke()
+                    _streamers.postValue(Resource.success(fakeRepo.testStreamers))
+                    return@launch
+                }
 
-            if(response.isSuccessful && response.body() != null) {
-                Log.v(TAG, "///${response.body()}")
-                response.body()?.data?.let {
-                    fakeRepo.streamers = it
-                    _streamers.postValue(Resource.success(it))
-                } ?: Resource.error("An unknown error occurred", null)
-//                fakeRepo.streamers = response.body()!!.data
-//                _streamers.postValue(fakeRepo.streamers)
-            }else{
-                listener.invoke()
-                _streamers.postValue(Resource.success(fakeRepo.testStreamers))
-                Resource.error("An unknown error occurred", null)
-                Log.e(TAG, "Response not successful")
+                if(response.isSuccessful && response.body() != null) {
+                    Log.v(TAG, "///${response.body()}")
+                    response.body()?.data?.let {
+                        fakeRepo.streamers = it
+                        _streamers.postValue(Resource.success(it))
+                    } ?: Resource.error("An unknown error occurred", null)
+                }else{
+                    listener.invoke()
+                    _streamers.postValue(Resource.success(fakeRepo.testStreamers))
+                    Resource.error("An unknown error occurred", null)
+                    Log.e(TAG, "Response not successful")
+                }
             }
         }
     }
