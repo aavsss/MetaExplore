@@ -1,9 +1,7 @@
 package com.aavashsthapit.myapplication.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -12,10 +10,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.aavashsthapit.myapplication.R
 import com.aavashsthapit.myapplication.adapters.StreamersAdapter
 import com.aavashsthapit.myapplication.api.TwitchStreamersApi
-import com.aavashsthapit.myapplication.data.repo.FakeRepo
 import com.aavashsthapit.myapplication.databinding.FragmentHomeBinding
+import com.aavashsthapit.myapplication.other.Constants.PROD
 import com.aavashsthapit.myapplication.ui.viewmodels.MainViewModel
-import com.bumptech.glide.RequestManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -47,7 +44,12 @@ class HomeFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomeBinding.bind(view) //viewBinding
-        mainViewModel = mainViewModel ?: ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+        if (mainViewModel != null){
+            PROD = false
+        }else{
+            mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+            PROD = true
+        }
         setupRecyclerView()
         subscribeStreamAdapterToFakeRepo()
 
@@ -58,7 +60,7 @@ class HomeFragment @Inject constructor(
             )
         }
 
-        mainViewModel?.sendHttpRequest(twitchStreamersApi)
+        if (PROD) mainViewModel?.sendHttpRequest(twitchStreamersApi)
         //If the connection is not made
         mainViewModel?.listener = {
             binding.allStreamersProgressBar.isVisible = false

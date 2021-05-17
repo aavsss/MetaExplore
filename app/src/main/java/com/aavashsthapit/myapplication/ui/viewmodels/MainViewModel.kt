@@ -9,8 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.aavashsthapit.myapplication.api.TwitchStreamersApi
 import com.aavashsthapit.myapplication.data.entity.Streamer
 import com.aavashsthapit.myapplication.data.repo.FakeRepo
+import com.aavashsthapit.myapplication.other.Constants.PROD
 import com.aavashsthapit.myapplication.other.Constants.TAG
-import com.aavashsthapit.myapplication.other.Event
 import com.aavashsthapit.myapplication.other.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -30,6 +30,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     val fakeRepo: FakeRepo,
 ) : ViewModel() {
+
     private val _streamers = MutableLiveData<Resource<List<Streamer>>>()
     val streamers : LiveData<Resource<List<Streamer>>> = _streamers
 
@@ -46,10 +47,17 @@ class MainViewModel @Inject constructor(
         override fun onQueryTextChange(newText: String?): Boolean {
             if (newText != null) {
                 if (newText.isNotEmpty()){
-                    val tempList = fakeRepo.streamers.filter {
-                        it.display_name.toLowerCase(Locale.ROOT).contains(newText.toLowerCase(Locale.ROOT))
+                    val tempList = if(PROD){
+                        fakeRepo.streamers.filter {
+                            it.display_name.toLowerCase(Locale.ROOT).contains(newText.toLowerCase(Locale.ROOT))
+                        }
+                    }else{ //Testing
+                        fakeRepo.testStreamers.filter {
+                            it.display_name.toLowerCase(Locale.ROOT).contains(newText.toLowerCase(Locale.ROOT))
+                        }
                     }
                     _streamers.postValue(Resource.success(tempList))
+
                 }else{
                     //Show all
                     _streamers.postValue(Resource.success(fakeRepo.streamers))
@@ -94,5 +102,9 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun setTestStreamers(streamers : List<Streamer>) {
+        _streamers.postValue(Resource.success(streamers))
     }
 }

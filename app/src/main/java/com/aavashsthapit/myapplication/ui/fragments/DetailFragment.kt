@@ -22,7 +22,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
     @Inject
     lateinit var glide: RequestManager
 
-    lateinit var mainViewModel: MainViewModel
+    lateinit var mainViewModel : MainViewModel
 
     lateinit var binding: FragmentDetailBinding
 
@@ -34,7 +34,8 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
     }
 
     private fun setupViews(){
-        mainViewModel.currentStreamer.observe(viewLifecycleOwner) {
+        println("/// current streamer " + mainViewModel?.currentStreamer?.value)
+        mainViewModel?.currentStreamer?.observe(viewLifecycleOwner) {
             binding.apply {
                 tvName.text = it.data?.display_name ?: "TenZ"
                 tvCategory.text = it.data?.game_name ?: "Valorant"

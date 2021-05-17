@@ -34,6 +34,7 @@ import com.aavashsthapit.myapplication.other.Resource
 import com.aavashsthapit.myapplication.ui.viewmodels.MainViewModel
 import com.google.common.truth.Truth.assertThat
 import org.hamcrest.Matchers.allOf
+import java.util.*
 import java.util.regex.Matcher
 
 @MediumTest
@@ -61,28 +62,36 @@ class HomeFragmentTest {
 
     @Test
     fun isAppNameVisible() {
-        launchFragmentInHiltContainer<HomeFragment> {
+        launchFragmentInHiltContainer<HomeFragment>(
+                fragmentFactory = testFragmentFactory
+        ) {
         }
         onView(withId(R.id.app_name)).check(matches(isDisplayed()))
     }
 
     @Test
     fun isSearchViewVisible() {
-        launchFragmentInHiltContainer<HomeFragment> {
+        launchFragmentInHiltContainer<HomeFragment>(
+                fragmentFactory = testFragmentFactory
+        ) {
         }
         onView(withId(R.id.sv_search_streamers)).check(matches(isDisplayed()))
     }
 
     @Test
     fun isCategoryNameVisible() {
-        launchFragmentInHiltContainer<HomeFragment> {
+        launchFragmentInHiltContainer<HomeFragment>(
+                fragmentFactory = testFragmentFactory
+        ) {
         }
         onView(withId(R.id.tv_category)).check(matches(isDisplayed()))
     }
 
     @Test
     fun isRecyclerViewVisible() {
-        launchFragmentInHiltContainer<HomeFragment> {
+        launchFragmentInHiltContainer<HomeFragment>(
+                fragmentFactory = testFragmentFactory
+        ) {
             streamersAdapter.apply {
                 streamers = FakeRepo.testStreamers
             }
@@ -98,7 +107,9 @@ class HomeFragmentTest {
 
     @Test
     fun scrollingInRecyclerView() {
-        launchFragmentInHiltContainer<HomeFragment> {
+        launchFragmentInHiltContainer<HomeFragment>(
+                fragmentFactory = testFragmentFactory
+        ) {
             streamersAdapter.apply {
                 streamers = FakeRepo.testStreamers
             }
@@ -124,7 +135,9 @@ class HomeFragmentTest {
         val navController = mock(NavController::class.java)
 
         //Launching Fragment contained in Hilt
-        launchFragmentInHiltContainer<HomeFragment> {
+        launchFragmentInHiltContainer<HomeFragment>(
+                fragmentFactory = testFragmentFactory
+        ) {
 
             //Populating streamers. Was having error here when it was above launch Fragment
             streamersAdapter.apply {
@@ -163,12 +176,17 @@ class HomeFragmentTest {
     @Test
     fun correctImageDisplayedInView() {
         val imageUrl = "https://specials-images.forbesimg.com/imageserve/5f5f55887d9eec237a586841/960x0.jpg?fit=scale"
-        val testViewModel = MainViewModel(FakeRepo)
-        launchFragmentInHiltContainer<HomeFragment> {
+        //Need to write a Fragment Factory class to perform this
+        var testViewModel: MainViewModel? = null
+        launchFragmentInHiltContainer<HomeFragment>(
+                fragmentFactory = testFragmentFactory
+        ) {
+            testViewModel = mainViewModel
+            testViewModel?.setTestStreamers(FakeRepo.testStreamers)
             streamersAdapter.apply {
-                streamers = FakeRepo.streamers
-                mainViewModel = testViewModel
+                streamers = FakeRepo.testStreamers
             }
+
             //Instantiating binding
             binding = FragmentHomeBinding.bind(requireView()) //viewBinding
             binding.rvAllStreamers.apply {
@@ -177,12 +195,8 @@ class HomeFragmentTest {
             }
         }
 
-        assertThat(
-                streamersAdapterForPractice.streamers[0].thumbnail_url
-//                testViewModel.streamers.value?.data?.get(0)?.thumbnail_url
-        ).contains(
-                imageUrl
-        )
+        assertThat(testViewModel?.streamers?.getOrAwaitValueAndroidTest()?.data?.get(0)?.thumbnail_url).contains(imageUrl)
+
     }
 
     @Test
@@ -194,7 +208,7 @@ class HomeFragmentTest {
         ) {
             testViewModel = mainViewModel
             streamersAdapter.apply {
-                streamers = FakeRepo.streamers
+                streamers = FakeRepo.testStreamers
             }
 
             //Instantiating binding
@@ -205,12 +219,12 @@ class HomeFragmentTest {
             }
         }
 
-//        onView(withId(R.id.sv_search_streamers)).perform(
-//                typeSearchViewText("its")
-//        )
+        onView(withId(R.id.sv_search_streamers)).perform(
+                typeSearchViewText("poki")
+        )
 
-//        println(testViewModel?.streamers?.getOrAwaitValueAndroidTest())
-//        assertThat(testViewModel?.streamers?.getOrAwaitValueAndroidTest()?.data).hasSize(1)
+        println(testViewModel?.streamers?.getOrAwaitValueAndroidTest()?.data)
+        assertThat(testViewModel?.streamers?.getOrAwaitValueAndroidTest()?.data).hasSize(1)
     }
 
     private fun typeSearchViewText(text: String): ViewAction {
@@ -228,5 +242,7 @@ class HomeFragmentTest {
             }
         }
     }
+
+
 
 }
