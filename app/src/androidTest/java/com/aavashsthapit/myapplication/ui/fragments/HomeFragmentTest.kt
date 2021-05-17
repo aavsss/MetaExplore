@@ -1,13 +1,17 @@
 package com.aavashsthapit.myapplication.ui.fragments
 
+import android.view.View
+import androidx.appcompat.widget.SearchView
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.UiController
+import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.filters.MediumTest
 import com.aavashsthapit.myapplication.R
 import com.aavashsthapit.myapplication.adapters.BaseStreamersAdapter
@@ -24,8 +28,13 @@ import org.junit.Test
 import javax.inject.Inject
 import org.mockito.Mockito.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.*
+import com.aavashsthapit.myapplication.getOrAwaitValueAndroidTest
+import com.aavashsthapit.myapplication.other.Resource
 import com.aavashsthapit.myapplication.ui.viewmodels.MainViewModel
 import com.google.common.truth.Truth.assertThat
+import org.hamcrest.Matchers.allOf
+import java.util.regex.Matcher
 
 @MediumTest
 @HiltAndroidTest
@@ -35,8 +44,14 @@ class HomeFragmentTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
+    @get:Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
+
     @Inject
     lateinit var streamersAdapterForPractice : StreamersAdapter
+
+    @Inject
+    lateinit var testFragmentFactory: TestStreamersFragmentFactory
 
     @Before
     fun setup(){
@@ -170,5 +185,48 @@ class HomeFragmentTest {
         )
     }
 
+    @Test
+    fun testingSearchCallback(){
+        //Need to write a Fragment Factory class to perform this
+        var testViewModel: MainViewModel? = null
+        launchFragmentInHiltContainer<HomeFragment>(
+                fragmentFactory = testFragmentFactory
+        ) {
+            testViewModel = mainViewModel
+            streamersAdapter.apply {
+                streamers = FakeRepo.streamers
+            }
+
+            //Instantiating binding
+            binding = FragmentHomeBinding.bind(requireView()) //viewBinding
+            binding.rvAllStreamers.apply {
+                adapter = streamersAdapter
+                layoutManager = LinearLayoutManager(requireContext()) //requireContext error here?
+            }
+        }
+
+//        onView(withId(R.id.sv_search_streamers)).perform(
+//                typeSearchViewText("its")
+//        )
+
+//        println(testViewModel?.streamers?.getOrAwaitValueAndroidTest())
+//        assertThat(testViewModel?.streamers?.getOrAwaitValueAndroidTest()?.data).hasSize(1)
+    }
+
+    private fun typeSearchViewText(text: String): ViewAction {
+        return object : ViewAction {
+            override fun getConstraints(): org.hamcrest.Matcher<View> {
+                return allOf(isDisplayed(), isAssignableFrom(SearchView::class.java))
+            }
+
+            override fun getDescription(): String {
+                return "Change view text"
+            }
+
+            override fun perform(uiController: UiController?, view: View?) {
+                (view as SearchView).setQuery(text, false)
+            }
+        }
+    }
 
 }

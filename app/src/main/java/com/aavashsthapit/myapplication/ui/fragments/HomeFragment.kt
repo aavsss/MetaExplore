@@ -15,6 +15,7 @@ import com.aavashsthapit.myapplication.api.TwitchStreamersApi
 import com.aavashsthapit.myapplication.data.repo.FakeRepo
 import com.aavashsthapit.myapplication.databinding.FragmentHomeBinding
 import com.aavashsthapit.myapplication.ui.viewmodels.MainViewModel
+import com.bumptech.glide.RequestManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -27,13 +28,17 @@ import javax.inject.Inject
  * Uses setOnTextChangeQueryListener for search feature
  * streamersAdapter.streamers instantiated here in subScribeToFakeRepo
  */
+
+/**
+ * Error log bothering
+ * IOException, you might not have internet connection timeout
+ */
 @AndroidEntryPoint
-class HomeFragment : Fragment(R.layout.fragment_home){
+class HomeFragment @Inject constructor(
+        val streamersAdapter: StreamersAdapter,
+        var mainViewModel: MainViewModel? = null
+) : Fragment(R.layout.fragment_home){
 
-    lateinit var mainViewModel: MainViewModel
-
-    @Inject
-    lateinit var streamersAdapter: StreamersAdapter
     @Inject
     lateinit var twitchStreamersApi: TwitchStreamersApi
 
@@ -42,24 +47,24 @@ class HomeFragment : Fragment(R.layout.fragment_home){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomeBinding.bind(view) //viewBinding
-        mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+        mainViewModel = mainViewModel ?: ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
         setupRecyclerView()
         subscribeStreamAdapterToFakeRepo()
 
         streamersAdapter.setItemClickListener {
-            mainViewModel.setCurrentStreamer(it)
+            mainViewModel?.setCurrentStreamer(it)
             findNavController().navigate(
                 R.id.action_homeFragment_to_detailFragment
             )
         }
 
-        mainViewModel.sendHttpRequest(twitchStreamersApi)
+        mainViewModel?.sendHttpRequest(twitchStreamersApi)
         //If the connection is not made
-        mainViewModel.listener = {
+        mainViewModel?.listener = {
             binding.allStreamersProgressBar.isVisible = false
         }
         //Filter based on search query
-        binding.svSearchStreamers.setOnQueryTextListener(mainViewModel.searchCallback)
+        binding.svSearchStreamers.setOnQueryTextListener(mainViewModel?.searchCallback)
 
     }
 
@@ -69,7 +74,7 @@ class HomeFragment : Fragment(R.layout.fragment_home){
     }
 
     private fun subscribeStreamAdapterToFakeRepo(){
-        mainViewModel.streamers.observe(viewLifecycleOwner) {
+        mainViewModel?.streamers?.observe(viewLifecycleOwner) {
             streamersAdapter.streamers = it.data!!
             binding.allStreamersProgressBar.visibility = View.GONE
         }
