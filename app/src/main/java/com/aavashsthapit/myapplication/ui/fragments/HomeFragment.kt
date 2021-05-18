@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.aavashsthapit.myapplication.R
 import com.aavashsthapit.myapplication.adapters.StreamersAdapter
 import com.aavashsthapit.myapplication.api.TwitchStreamersApi
+import com.aavashsthapit.myapplication.data.repo.FakeRepo
 import com.aavashsthapit.myapplication.databinding.FragmentHomeBinding
-import com.aavashsthapit.myapplication.other.Constants.PROD
 import com.aavashsthapit.myapplication.ui.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -44,12 +44,7 @@ class HomeFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomeBinding.bind(view) //viewBinding
-        if (mainViewModel != null){
-            PROD = false
-        }else{
-            mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
-            PROD = true
-        }
+        mainViewModel = mainViewModel ?: ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
         setupRecyclerView()
         subscribeStreamAdapterToFakeRepo()
 
@@ -60,13 +55,13 @@ class HomeFragment @Inject constructor(
             )
         }
 
-        if (PROD) mainViewModel?.sendHttpRequest(twitchStreamersApi)
+        mainViewModel?.sendHttpRequest(twitchStreamersApi)
         //If the connection is not made
         mainViewModel?.listener = {
             binding.allStreamersProgressBar.isVisible = false
         }
         //Filter based on search query
-        binding.svSearchStreamers.setOnQueryTextListener(mainViewModel?.searchCallback)
+        binding.svSearchStreamers.setOnQueryTextListener(mainViewModel?.getSearchCallback(FakeRepo.streamers))
 
     }
 

@@ -217,6 +217,7 @@ class HomeFragmentTest {
                 adapter = streamersAdapter
                 layoutManager = LinearLayoutManager(requireContext()) //requireContext error here?
             }
+            binding.svSearchStreamers.setOnQueryTextListener(testViewModel?.getSearchCallback(FakeRepo.testStreamers))
         }
 
         onView(withId(R.id.sv_search_streamers)).perform(

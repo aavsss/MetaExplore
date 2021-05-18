@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.aavashsthapit.myapplication.api.TwitchStreamersApi
 import com.aavashsthapit.myapplication.data.entity.Streamer
 import com.aavashsthapit.myapplication.data.repo.FakeRepo
-import com.aavashsthapit.myapplication.other.Constants.PROD
 import com.aavashsthapit.myapplication.other.Constants.TAG
 import com.aavashsthapit.myapplication.other.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,7 +38,8 @@ class MainViewModel @Inject constructor(
 
     lateinit var listener: (() -> Unit)
 
-    val searchCallback = object : SearchView.OnQueryTextListener {
+
+    fun getSearchCallback(streamers: List<Streamer>) = object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String?): Boolean {
             return false
         }
@@ -47,15 +47,18 @@ class MainViewModel @Inject constructor(
         override fun onQueryTextChange(newText: String?): Boolean {
             if (newText != null) {
                 if (newText.isNotEmpty()){
-                    val tempList = if(PROD){
+                    val tempList : List<Streamer> = if(streamers.isEmpty()){
                         fakeRepo.streamers.filter {
                             it.display_name.toLowerCase(Locale.ROOT).contains(newText.toLowerCase(Locale.ROOT))
                         }
-                    }else{ //Testing
-                        fakeRepo.testStreamers.filter {
+                    }else{
+                        streamers.filter {
                             it.display_name.toLowerCase(Locale.ROOT).contains(newText.toLowerCase(Locale.ROOT))
                         }
                     }
+
+                    println("/// streamers " + streamers)
+
                     _streamers.postValue(Resource.success(tempList))
 
                 }else{
