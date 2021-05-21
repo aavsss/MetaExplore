@@ -10,7 +10,6 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.filters.MediumTest
 import com.aavashsthapit.myapplication.R
@@ -30,12 +29,9 @@ import org.mockito.Mockito.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.aavashsthapit.myapplication.getOrAwaitValueAndroidTest
-import com.aavashsthapit.myapplication.other.Resource
 import com.aavashsthapit.myapplication.ui.viewmodels.MainViewModel
 import com.google.common.truth.Truth.assertThat
 import org.hamcrest.Matchers.allOf
-import java.util.*
-import java.util.regex.Matcher
 
 @MediumTest
 @HiltAndroidTest
@@ -200,7 +196,7 @@ class HomeFragmentTest {
     }
 
     @Test
-    fun testingSearchCallback(){
+    fun testingSearchCallback() {
         //Need to write a Fragment Factory class to perform this
         var testViewModel: MainViewModel? = null
         launchFragmentInHiltContainer<HomeFragment>(

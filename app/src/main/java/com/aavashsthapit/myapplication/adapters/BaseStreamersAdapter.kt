@@ -48,9 +48,14 @@ abstract class BaseStreamersAdapter(
     }
 
     protected var onItemClickListener: ((Streamer) -> Unit)? = null
+    protected lateinit var onItemLongClickListener: ((Streamer) -> Boolean)
 
     fun setItemClickListener(listener: (Streamer) -> Unit) {
         onItemClickListener = listener
+    }
+
+    fun setItemLongClickListener(listener: (Streamer) -> Boolean) {
+        onItemLongClickListener = listener
     }
 
     override fun getItemCount(): Int {

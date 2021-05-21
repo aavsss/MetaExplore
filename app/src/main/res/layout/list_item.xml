@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/cl_list_item"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -7,6 +8,7 @@
     android:layout_marginTop="10dp">
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/tv_card_holder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
@@ -15,41 +17,42 @@
         app:layout_constraintRight_toRightOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_data_holder"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-                <ImageView
-                    android:id="@+id/iv_streamer_img"
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+            <ImageView
+                android:id="@+id/iv_streamer_img"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:gravity="center|left"
-                    android:text="@string/sasa"
-                    android:layout_marginTop="8dp"
-                    android:textSize="20sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/iv_streamer_img"
-                    app:layout_constraintTop_toTopOf="parent"/>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="center|left"
+                android:text="@string/sasa"
+                android:layout_marginTop="8dp"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_streamer_img"
+                app:layout_constraintTop_toTopOf="parent"/>
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_category"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:text="@string/valorant"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/iv_streamer_img"
-                    app:layout_constraintTop_toBottomOf="@id/tv_name"/>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_category"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:text="@string/valorant"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_streamer_img"
+                app:layout_constraintTop_toBottomOf="@id/tv_name"/>
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_is_live"
@@ -66,11 +69,39 @@
                 app:layout_constraintLeft_toLeftOf="@id/tv_name"
                 app:layout_constraintTop_toTopOf="parent"/>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_extra_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/iv_streamer_img"
+                app:layout_constraintRight_toRightOf="@id/tv_is_live"
+                app:layout_constraintTop_toBottomOf="@id/tv_category"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="91dp"
+                android:layout_marginEnd="10dp"
+                android:visibility="visible">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_cast_lang"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/en"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_start_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/tv_cast_lang"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:text="@string/today"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     </com.google.android.material.card.MaterialCardView>
-
 
 
 

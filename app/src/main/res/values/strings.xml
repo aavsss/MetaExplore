@@ -4,4 +4,7 @@
     <string name="valorant">Valorant</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="current_valorant_streamers">Current Valorant Streamers</string>
+    <string name="en">en</string>
+    <string name="today">today</string>
+    <string name="lang">Language %1$s</string>
 </resources>

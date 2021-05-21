@@ -2,6 +2,9 @@ package com.aavashsthapit.myapplication.ui.fragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -13,6 +16,7 @@ import com.aavashsthapit.myapplication.api.TwitchStreamersApi
 import com.aavashsthapit.myapplication.data.repo.FakeRepo
 import com.aavashsthapit.myapplication.databinding.FragmentHomeBinding
 import com.aavashsthapit.myapplication.ui.viewmodels.MainViewModel
+import com.google.android.material.textview.MaterialTextView
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -48,11 +52,22 @@ class HomeFragment @Inject constructor(
         setupRecyclerView()
         subscribeStreamAdapterToFakeRepo()
 
-        streamersAdapter.setItemClickListener {
-            mainViewModel?.setCurrentStreamer(it)
-            findNavController().navigate(
-                R.id.action_homeFragment_to_detailFragment
-            )
+        streamersAdapter.apply {
+            setItemClickListener {
+                mainViewModel?.setCurrentStreamer(it)
+                findNavController().navigate(
+                        R.id.action_homeFragment_to_detailFragment
+                )
+            }
+
+            setItemLongClickListener {
+
+                it.expanded = !it.expanded
+                this.notifyItemChanged(streamers.indexOfFirst { streamer ->
+                    streamer.display_name == it.display_name
+                })
+                return@setItemLongClickListener true
+            }
         }
 
         mainViewModel?.sendHttpRequest(twitchStreamersApi)

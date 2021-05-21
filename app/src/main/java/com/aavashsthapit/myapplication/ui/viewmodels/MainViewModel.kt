@@ -57,8 +57,6 @@ class MainViewModel @Inject constructor(
                         }
                     }
 
-                    println("/// streamers " + streamers)
-
                     _streamers.postValue(Resource.success(tempList))
 
                 }else{
