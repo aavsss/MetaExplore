@@ -1,11 +1,15 @@
 package com.aavashsthapit.myapplication.ui.fragments
 
+import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.isVisible
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -15,6 +19,7 @@ import com.aavashsthapit.myapplication.adapters.StreamersAdapter
 import com.aavashsthapit.myapplication.api.TwitchStreamersApi
 import com.aavashsthapit.myapplication.data.repo.FakeRepo
 import com.aavashsthapit.myapplication.databinding.FragmentHomeBinding
+import com.aavashsthapit.myapplication.other.Extensions.isViewVisible
 import com.aavashsthapit.myapplication.ui.viewmodels.MainViewModel
 import com.google.android.material.textview.MaterialTextView
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,6 +55,7 @@ class HomeFragment @Inject constructor(
         binding = FragmentHomeBinding.bind(view) //viewBinding
         mainViewModel = mainViewModel ?: ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
         setupRecyclerView()
+        setUpScrollBehavior()
         subscribeStreamAdapterToFakeRepo()
 
         streamersAdapter.apply {
@@ -80,10 +86,18 @@ class HomeFragment @Inject constructor(
 
     }
 
+    private fun setUpScrollBehavior() = binding.scvEntire.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+//        if (scrollY < oldScrollY && !binding.scvEntire.isViewVisible(binding.svSearchStreamers)) {
+//            println(".. going up when search view is not visible")
+//
+//        }
+    }
+
     private fun setupRecyclerView() = binding.rvAllStreamers.apply {
         adapter = streamersAdapter
         layoutManager = LinearLayoutManager(requireContext())
     }
+
 
     private fun subscribeStreamAdapterToFakeRepo(){
         mainViewModel?.streamers?.observe(viewLifecycleOwner) {
@@ -91,4 +105,6 @@ class HomeFragment @Inject constructor(
             binding.allStreamersProgressBar.visibility = View.GONE
         }
     }
+
+
 }

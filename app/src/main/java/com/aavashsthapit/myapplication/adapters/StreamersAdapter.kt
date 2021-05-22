@@ -57,7 +57,7 @@ class StreamersAdapter @Inject constructor(
         val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
         val date = try {
             format.parse(dateString)
-        }catch (e : Exception) {
+        } catch (e : Exception) {
             println(e)
             format.parse("2021-21-05T09:27:37Z")
         }

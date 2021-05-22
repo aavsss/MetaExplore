@@ -126,6 +126,27 @@ class HomeFragmentTest {
     }
 
     @Test
+    fun correctTextViewsDisplayed_pass() {
+        launchFragmentInHiltContainer<HomeFragment>(
+                fragmentFactory = testFragmentFactory
+        ) {
+            streamersAdapter.apply {
+                streamers = FakeRepo.testStreamers
+            }
+
+            binding = FragmentHomeBinding.bind(requireView()) //viewBinding
+            binding.rvAllStreamers.apply {
+                adapter = streamersAdapter
+                layoutManager = LinearLayoutManager(requireContext()) //requireContext error here?
+            }
+        }
+
+       /*
+       TODO: test if the elements inside recyclerView is visible or not
+        */
+    }
+
+    @Test
     fun homeFragment_navigate_to_DetailFragment(){
         //Mocking navController
         val navController = mock(NavController::class.java)
