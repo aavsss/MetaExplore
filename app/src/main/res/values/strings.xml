@@ -7,4 +7,6 @@
     <string name="en">en</string>
     <string name="today">today</string>
     <string name="lang">Language %1$s</string>
+    <string name="send">Send</string>
+    <string name="send_message">Send Message To</string>
 </resources>
