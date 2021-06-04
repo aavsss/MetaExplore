@@ -38,7 +38,6 @@ class MainViewModel @Inject constructor(
 
     lateinit var listener: (() -> Unit)
 
-
     fun getSearchCallback(streamers: List<Streamer>) = object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String?): Boolean {
             return false
@@ -68,11 +67,11 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun setCurrentStreamer(streamer : Streamer){
+    fun setCurrentStreamer(streamer : Streamer) {
         _currentStreamer.postValue(Resource.success(streamer))
     }
 
-    fun sendHttpRequest(twitchStreamersApi: TwitchStreamersApi){
+    fun sendHttpRequest(twitchStreamersApi: TwitchStreamersApi) {
         if(fakeRepo.streamers.isEmpty()){
             viewModelScope.launch {
                 val response = try {

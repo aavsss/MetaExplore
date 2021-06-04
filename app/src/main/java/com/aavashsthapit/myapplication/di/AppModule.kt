@@ -27,6 +27,7 @@ import javax.inject.Singleton
  * Module provides instance of:
  * 1. FakeRepo
  * 2. Glide
+ * 3. Retrofit
  */
 @Module
 @InstallIn(SingletonComponent::class)

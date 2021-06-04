@@ -46,7 +46,7 @@ class StreamersAdapter @Inject constructor(
                 }
             }
 
-            setOnLongClickListener{
+            setOnLongClickListener {
                 onItemLongClickListener(streamer)
             }
         }

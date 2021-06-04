@@ -1,15 +1,8 @@
 package com.aavashsthapit.myapplication.ui.fragments
 
-import android.graphics.Rect
-import android.os.Build
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.RequiresApi
-import androidx.appcompat.widget.AppCompatTextView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.isVisible
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -21,7 +14,6 @@ import com.aavashsthapit.myapplication.data.repo.FakeRepo
 import com.aavashsthapit.myapplication.databinding.FragmentHomeBinding
 import com.aavashsthapit.myapplication.other.Extensions.isViewVisible
 import com.aavashsthapit.myapplication.ui.viewmodels.MainViewModel
-import com.google.android.material.textview.MaterialTextView
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "439829991046",
+    "project_id": "metaexplore",
+    "storage_bucket": "metaexplore.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:439829991046:android:6a566ae0444d2be9594b07",
+        "android_client_info": {
+          "package_name": "com.aavashsthapit.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "439829991046-9op6qgnis37vnit18ckrf3o1bb1b023t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBa0Xx4QzRJ50Cq4qSasGh4GA4f2aKCmAw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "439829991046-9op6qgnis37vnit18ckrf3o1bb1b023t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
