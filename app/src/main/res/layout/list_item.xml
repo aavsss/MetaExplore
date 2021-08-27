@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="viewmodel"
-            type="com.aavashsthapit.myapplication.ui.viewmodels.MainViewModel" />
+            type="com.aavashsthapit.myapplication.data.entity.StreamerViewModel" />
 
     </data>
 
@@ -34,6 +35,7 @@
                     android:id="@+id/iv_streamer_img"
                     android:layout_width="75dp"
                     android:layout_height="75dp"
+                    app:displayImage="@{viewmodel.thumbnail_url}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,7 +46,8 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:gravity="center|left"
-                    android:text="@string/sasa"
+                    android:text="@{viewmodel.display_name}"
+                    tools:text="@string/sasa"
                     android:layout_marginTop="8dp"
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -57,7 +60,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:text="@string/valorant"
+                    android:text="@{viewmodel.game_name}"
+                    tools:text="@string/valorant"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/iv_streamer_img"
@@ -67,6 +71,7 @@
                     android:id="@+id/tv_is_live"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:visible_or_gone="@{viewmodel.is_live}"
                     android:text="LIVE"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="10dp"
@@ -88,12 +93,13 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginStart="91dp"
                     android:layout_marginEnd="10dp"
-                    android:visibility="visible">
+                    app:visible_or_gone="@{viewmodel.expanded}">
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_cast_lang"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="@{viewmodel.broadcaster_language}"
                         android:hint="@string/en"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -104,6 +110,7 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintTop_toBottomOf="@id/tv_cast_lang"
                         app:layout_constraintStart_toStartOf="parent"
+                        app:formatted_start_date="@{viewmodel.started_at}"
                         android:text="@string/today" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

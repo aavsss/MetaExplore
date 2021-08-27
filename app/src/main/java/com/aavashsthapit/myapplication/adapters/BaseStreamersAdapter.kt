@@ -6,7 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.aavashsthapit.myapplication.data.entity.Streamer
+import com.aavashsthapit.myapplication.data.entity.StreamerViewModel
 import com.aavashsthapit.myapplication.databinding.ListItemBinding
 
 /**
@@ -22,19 +22,19 @@ abstract class BaseStreamersAdapter(
 
     class StreamerViewHolder(itemView: ListItemBinding) : RecyclerView.ViewHolder(itemView.root)
 
-    protected val diffCallback = object : DiffUtil.ItemCallback<Streamer>() {
-        override fun areItemsTheSame(oldItem: Streamer, newItem: Streamer): Boolean {
+    protected val diffCallback = object : DiffUtil.ItemCallback<StreamerViewModel>() {
+        override fun areItemsTheSame(oldItem: StreamerViewModel, newItem: StreamerViewModel): Boolean {
             return oldItem.display_name == newItem.display_name
         }
 
-        override fun areContentsTheSame(oldItem: Streamer, newItem: Streamer): Boolean {
+        override fun areContentsTheSame(oldItem: StreamerViewModel, newItem: StreamerViewModel): Boolean {
             return oldItem.hashCode() == newItem.hashCode()
         }
     }
 
-    protected abstract val differ: AsyncListDiffer<Streamer>
+    protected abstract val differ: AsyncListDiffer<StreamerViewModel>
     protected lateinit var binding: ListItemBinding
-    var streamers: List<Streamer>
+    var streamerViewModels: List<StreamerViewModel>
         get() = differ.currentList
         set(value) = differ.submitList(value)
 
@@ -48,18 +48,18 @@ abstract class BaseStreamersAdapter(
         return StreamerViewHolder(binding)
     }
 
-    protected var onItemClickListener: ((Streamer) -> Unit)? = null
-    protected lateinit var onItemLongClickListener: ((Streamer) -> Boolean)
+    protected var onItemClickListener: ((StreamerViewModel) -> Unit)? = null
+    protected lateinit var onItemLongClickListener: ((StreamerViewModel) -> Boolean)
 
-    fun setItemClickListener(listener: (Streamer) -> Unit) {
+    fun setItemClickListener(listener: (StreamerViewModel) -> Unit) {
         onItemClickListener = listener
     }
 
-    fun setItemLongClickListener(listener: (Streamer) -> Boolean) {
+    fun setItemLongClickListener(listener: (StreamerViewModel) -> Boolean) {
         onItemLongClickListener = listener
     }
 
     override fun getItemCount(): Int {
-        return streamers.size
+        return streamerViewModels.size
     }
 }

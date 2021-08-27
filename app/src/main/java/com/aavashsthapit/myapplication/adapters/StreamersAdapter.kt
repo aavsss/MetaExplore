@@ -1,12 +1,8 @@
 package com.aavashsthapit.myapplication.adapters
 
-import android.view.View
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.AsyncListDiffer
 import com.aavashsthapit.myapplication.R
 import com.bumptech.glide.RequestManager
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -23,22 +19,16 @@ class StreamersAdapter @Inject constructor(
     override val differ = AsyncListDiffer(this, diffCallback)
 
     override fun onBindViewHolder(holder: StreamerViewHolder, position: Int) {
-        val streamer = streamers[position]
+        val streamer = streamerViewModels[position]
         binding.apply {
-            tvName.text = streamer.display_name
-            tvCategory.text = streamer.game_name
-            tvIsLive.isVisible = streamer.is_live
-            glide.load(streamer.thumbnail_url).into(ivStreamerImg)
-            tvCastLang.text = "Language: ${streamer.broadcaster_language}"
-            tvStartDate.text = "Start time: ${convertISOTime(streamer.started_at)}"
-            clExtraInfo.visibility = if (streamer.expanded) View.VISIBLE else View.GONE
+            viewmodel = streamerViewModels[position]
         }
 
         holder.itemView.apply {
 
             setOnClickListener {
                 onItemClickListener?.let { click ->
-                    click(streamer) //Passing streamer here
+                    click(streamer) // Passing streamer here
                 }
             }
 
@@ -47,15 +37,5 @@ class StreamersAdapter @Inject constructor(
             }
         }
     }
-
-    private fun convertISOTime(dateString: String): String {
-        val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
-        val date = try {
-            format.parse(dateString)
-        } catch (e: Exception) {
-            println(e)
-            format.parse("2021-21-05T09:27:37Z")
-        }
-        return date!!.toString()
-    }
 }
+

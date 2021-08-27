@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.aavashsthapit.myapplication.R
 import com.aavashsthapit.myapplication.databinding.FragmentDetailBinding
-import com.aavashsthapit.myapplication.ui.dialogs.SingleMessageDialog
 import com.aavashsthapit.myapplication.ui.viewmodels.MainViewModel
 import com.bumptech.glide.RequestManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,22 +43,26 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         super.onViewCreated(view, savedInstanceState)
         mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
         setupViews()
+        subscribeToDialog()
     }
 
     private fun setupViews() {
-        mainViewModel.currentStreamer.observe(viewLifecycleOwner) {
+        mainViewModel.currentStreamerViewModel.observe(viewLifecycleOwner) {
             binding.apply {
                 viewmodel = mainViewModel
-                fabSendMessage.setOnClickListener {
-                    activity?.supportFragmentManager?.let { supportFragmentManager ->
-                        SingleMessageDialog().show(
-                            supportFragmentManager,
-                            SingleMessageDialog.TAG
-                        )
-                    }
-                }
             }
         }
     }
-}
 
+    // TODO shows up everytime user opens detailFragment ffs
+    private fun subscribeToDialog() {
+//        mainViewModel.showSendMessageDialog.observe(viewLifecycleOwner) {
+//            activity?.supportFragmentManager?.let { supportFragmentManager ->
+//                SingleMessageDialog().show(
+//                    supportFragmentManager,
+//                    SingleMessageDialog.TAG
+//                )
+//            }
+//        }
+    }
+}

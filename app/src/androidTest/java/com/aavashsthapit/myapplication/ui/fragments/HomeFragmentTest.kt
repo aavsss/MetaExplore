@@ -53,7 +53,7 @@ class HomeFragmentTest {
     @Before
     fun setup(){
         hiltRule.inject()
-        streamersAdapterForPractice.streamers = FakeRepo.testStreamers
+        streamersAdapterForPractice.streamerViewModels = FakeRepo.testStreamers
     }
 
     @Test
@@ -89,7 +89,7 @@ class HomeFragmentTest {
                 fragmentFactory = testFragmentFactory
         ) {
             streamersAdapter.apply {
-                streamers = FakeRepo.testStreamers
+                streamerViewModels = FakeRepo.testStreamers
             }
 
             binding = FragmentHomeBinding.bind(requireView()) //viewBinding
@@ -107,7 +107,7 @@ class HomeFragmentTest {
                 fragmentFactory = testFragmentFactory
         ) {
             streamersAdapter.apply {
-                streamers = FakeRepo.testStreamers
+                streamerViewModels = FakeRepo.testStreamers
             }
 
             binding = FragmentHomeBinding.bind(requireView()) //viewBinding
@@ -131,7 +131,7 @@ class HomeFragmentTest {
                 fragmentFactory = testFragmentFactory
         ) {
             streamersAdapter.apply {
-                streamers = FakeRepo.testStreamers
+                streamerViewModels = FakeRepo.testStreamers
             }
 
             binding = FragmentHomeBinding.bind(requireView()) //viewBinding
@@ -158,7 +158,7 @@ class HomeFragmentTest {
 
             //Populating streamers. Was having error here when it was above launch Fragment
             streamersAdapter.apply {
-                streamers = FakeRepo.testStreamers
+                streamerViewModels = FakeRepo.testStreamers
             }
 
             //Instantiating binding
@@ -201,7 +201,7 @@ class HomeFragmentTest {
             testViewModel = mainViewModel
             testViewModel?.setTestStreamers(FakeRepo.testStreamers)
             streamersAdapter.apply {
-                streamers = FakeRepo.testStreamers
+                streamerViewModels = FakeRepo.testStreamers
             }
 
             //Instantiating binding
@@ -225,7 +225,7 @@ class HomeFragmentTest {
         ) {
             testViewModel = mainViewModel
             streamersAdapter.apply {
-                streamers = FakeRepo.testStreamers
+                streamerViewModels = FakeRepo.testStreamers
             }
 
             //Instantiating binding

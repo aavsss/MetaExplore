@@ -1,6 +1,6 @@
 package com.aavashsthapit.myapplication.data.entity
 
 data class TwitchResponse(
-    val data : List<Streamer>,
-    val pagination : Pagination
+    val data: List<StreamerViewModel>,
+    val pagination: Pagination
 )

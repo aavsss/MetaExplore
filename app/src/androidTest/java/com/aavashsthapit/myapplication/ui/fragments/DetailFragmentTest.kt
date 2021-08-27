@@ -43,6 +43,4 @@ class DetailFragmentTest {
     fun isCategoryVisible() {
         onView(withId(R.id.tv_category)).check(matches(isDisplayed()))
     }
-
-
 }

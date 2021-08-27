@@ -27,7 +27,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_title"
-            android:text="@{viewmodel.currentStreamer.data.display_name}"
+            android:text="@{viewmodel.currentStreamerViewModel.data.display_name}"
             android:textSize="25sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

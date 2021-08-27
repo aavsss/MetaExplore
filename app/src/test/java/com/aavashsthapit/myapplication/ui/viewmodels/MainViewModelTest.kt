@@ -25,6 +25,6 @@ class MainViewModelTest {
             it.display_name == "TenZ"
         }
         viewModel.setCurrentStreamer(tenZ)
-        assertThat(viewModel.currentStreamer.value?.data == tenZ)
+        assertThat(viewModel.currentStreamerViewModel.value?.data == tenZ)
     }
 }

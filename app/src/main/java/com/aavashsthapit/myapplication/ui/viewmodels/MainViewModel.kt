@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aavashsthapit.myapplication.api.TwitchStreamersApi
-import com.aavashsthapit.myapplication.data.entity.Streamer
+import com.aavashsthapit.myapplication.data.entity.StreamerViewModel
 import com.aavashsthapit.myapplication.data.repo.FakeRepo
 import com.aavashsthapit.myapplication.other.Constants.TAG
 import com.aavashsthapit.myapplication.other.Resource
@@ -30,15 +30,21 @@ class MainViewModel @Inject constructor(
     val fakeRepo: FakeRepo,
 ) : ViewModel() {
 
-    private val _streamers = MutableLiveData<Resource<List<Streamer>>>()
-    val streamers: LiveData<Resource<List<Streamer>>> = _streamers
+    private val _streamers = MutableLiveData<Resource<List<StreamerViewModel>>>()
+    val streamers: LiveData<Resource<List<StreamerViewModel>>> = _streamers
 
-    private val _currentStreamer = MutableLiveData<Resource<Streamer>>()
-    val currentStreamer: LiveData<Resource<Streamer>> = _currentStreamer
+    private val _currentStreamer = MutableLiveData<Resource<StreamerViewModel>>()
+    val currentStreamerViewModel: LiveData<Resource<StreamerViewModel>> = _currentStreamer
+
+    private val _showSendMessageDialog = MutableLiveData<Resource<Unit>>()
+    val showSendMessageDialog: LiveData<Resource<Unit>> = _showSendMessageDialog
+
+    private val _progressBarListener = MutableLiveData<Resource<Unit>>()
+    val progressBarListener: LiveData<Resource<Unit>> = _progressBarListener
 
     lateinit var listener: (() -> Unit)
 
-    fun getSearchCallback(streamers: List<Streamer>) = object : SearchView.OnQueryTextListener {
+    fun getSearchCallback(streamerViewModels: List<StreamerViewModel>) = object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String?): Boolean {
             return false
         }
@@ -46,12 +52,12 @@ class MainViewModel @Inject constructor(
         override fun onQueryTextChange(newText: String?): Boolean {
             if (newText != null) {
                 if (newText.isNotEmpty()) {
-                    val tempList: List<Streamer> = if (streamers.isEmpty()) {
+                    val tempList: List<StreamerViewModel> = if (streamerViewModels.isEmpty()) {
                         fakeRepo.streamers.filter {
                             it.display_name.toLowerCase(Locale.ROOT).contains(newText.toLowerCase(Locale.ROOT))
                         }
                     } else {
-                        streamers.filter {
+                        streamerViewModels.filter {
                             it.display_name.toLowerCase(Locale.ROOT).contains(newText.toLowerCase(Locale.ROOT))
                         }
                     }
@@ -66,8 +72,8 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun setCurrentStreamer(streamer: Streamer) {
-        _currentStreamer.postValue(Resource.success(streamer))
+    fun setCurrentStreamer(streamerViewModel: StreamerViewModel) {
+        _currentStreamer.postValue(Resource.success(streamerViewModel))
     }
 
     fun sendHttpRequest(twitchStreamersApi: TwitchStreamersApi) {
@@ -77,12 +83,12 @@ class MainViewModel @Inject constructor(
                     twitchStreamersApi.getTwitchStreamers()
                 } catch (e: IOException) {
                     Log.e(TAG, "IOException, you might not have internet connection ${e.localizedMessage}")
-                    listener.invoke()
+                    hideProgressBar()
                     _streamers.postValue(Resource.success(fakeRepo.testStreamers))
                     return@launch
                 } catch (e: HttpException) {
                     Log.e(TAG, "HttpException, unexpected response")
-                    listener.invoke()
+                    hideProgressBar()
                     _streamers.postValue(Resource.success(fakeRepo.testStreamers))
                     return@launch
                 }
@@ -94,7 +100,7 @@ class MainViewModel @Inject constructor(
                         _streamers.postValue(Resource.success(it))
                     } ?: Resource.error("An unknown error occurred", null)
                 } else {
-                    listener.invoke()
+                    hideProgressBar()
                     _streamers.postValue(Resource.success(fakeRepo.testStreamers))
                     Resource.error("An unknown error occurred", null)
                     Log.e(TAG, "Response not successful")
@@ -103,7 +109,15 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun setTestStreamers(streamers: List<Streamer>) {
-        _streamers.postValue(Resource.success(streamers))
+    fun setTestStreamers(streamerViewModels: List<StreamerViewModel>) {
+        _streamers.postValue(Resource.success(streamerViewModels))
+    }
+
+    fun showDialog() {
+        _showSendMessageDialog.postValue(Resource.success(Unit))
+    }
+
+    fun hideProgressBar() {
+        _progressBarListener.postValue(Resource.success(Unit))
     }
 }

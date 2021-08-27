@@ -71,7 +71,7 @@ class HomeFragment @Inject constructor(
             setItemLongClickListener {
                 it.expanded = !it.expanded
                 this.notifyItemChanged(
-                    streamers.indexOfFirst { streamer ->
+                    streamerViewModels.indexOfFirst { streamer ->
                         streamer.display_name == it.display_name
                     }
                 )
@@ -81,9 +81,10 @@ class HomeFragment @Inject constructor(
 
         mainViewModel?.sendHttpRequest(twitchStreamersApi)
         // If the connection is not made
-        mainViewModel?.listener = {
-            binding.allStreamersProgressBar.isVisible = false
-        }
+//        mainViewModel?.listener = {
+//            binding.allStreamersProgressBar.isVisible = false
+//        }
+        subscribeToProgressBarListener()
         // Filter based on search query
         binding.svSearchStreamers.setOnQueryTextListener(mainViewModel?.getSearchCallback(FakeRepo.streamers))
     }
@@ -95,8 +96,14 @@ class HomeFragment @Inject constructor(
 
     private fun subscribeStreamAdapterToFakeRepo() {
         mainViewModel?.streamers?.observe(viewLifecycleOwner) {
-            streamersAdapter.streamers = it.data!!
+            streamersAdapter.streamerViewModels = it.data!!
             binding.allStreamersProgressBar.visibility = View.GONE
+        }
+    }
+
+    private fun subscribeToProgressBarListener() {
+        mainViewModel?.progressBarListener?.observe(viewLifecycleOwner) {
+            binding.allStreamersProgressBar.isVisible = false
         }
     }
 }

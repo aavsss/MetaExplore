@@ -1,6 +1,6 @@
 package com.aavashsthapit.myapplication.data.entity
 
-data class Streamer(
+data class StreamerViewModel(
     val broadcaster_language: String = "",
     val broadcaster_login: String = "",
     val display_name: String = "",

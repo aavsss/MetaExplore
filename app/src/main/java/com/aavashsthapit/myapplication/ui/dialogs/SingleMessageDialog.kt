@@ -51,7 +51,7 @@ class SingleMessageDialog : DialogFragment() {
     private fun setUpViews() {
         binding.apply {
             viewmodel = mainViewModel
-            etMessage.setText("Hey, I have a product that can boast your production in ${mainViewModel.currentStreamer.value?.data?.game_name}.")
+            etMessage.setText("Hey, I have a product that can boast your production in ${mainViewModel.currentStreamerViewModel.value?.data?.game_name}.")
             btnSubmit.setOnClickListener {
                 Toast.makeText(requireContext(), "Sent message", Toast.LENGTH_SHORT).show()
             }
