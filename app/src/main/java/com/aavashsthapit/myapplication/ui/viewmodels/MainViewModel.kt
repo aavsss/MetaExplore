@@ -10,6 +10,7 @@ import com.aavashsthapit.myapplication.api.TwitchStreamersApi
 import com.aavashsthapit.myapplication.data.entity.StreamerViewModel
 import com.aavashsthapit.myapplication.data.repo.FakeRepo
 import com.aavashsthapit.myapplication.other.Constants.TAG
+import com.aavashsthapit.myapplication.other.Event
 import com.aavashsthapit.myapplication.other.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -36,8 +37,8 @@ class MainViewModel @Inject constructor(
     private val _currentStreamer = MutableLiveData<Resource<StreamerViewModel>>()
     val currentStreamerViewModel: LiveData<Resource<StreamerViewModel>> = _currentStreamer
 
-    private val _showSendMessageDialog = MutableLiveData<Resource<Unit>>()
-    val showSendMessageDialog: LiveData<Resource<Unit>> = _showSendMessageDialog
+    private val _showSendMessageDialog = MutableLiveData<Event<Resource<Unit>>>()
+    val showSendMessageDialog: LiveData<Event<Resource<Unit>>> = _showSendMessageDialog
 
     private val _progressBarListener = MutableLiveData<Resource<Unit>>()
     val progressBarListener: LiveData<Resource<Unit>> = _progressBarListener
@@ -114,7 +115,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun showDialog() {
-        _showSendMessageDialog.postValue(Resource.success(Unit))
+        _showSendMessageDialog.postValue(Event(Resource.success(Unit)))
     }
 
     fun hideProgressBar() {

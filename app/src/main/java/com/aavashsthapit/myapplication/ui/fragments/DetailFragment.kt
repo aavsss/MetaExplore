@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.aavashsthapit.myapplication.R
 import com.aavashsthapit.myapplication.databinding.FragmentDetailBinding
+import com.aavashsthapit.myapplication.ui.dialogs.SingleMessageDialog
 import com.aavashsthapit.myapplication.ui.viewmodels.MainViewModel
 import com.bumptech.glide.RequestManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,15 +55,16 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         }
     }
 
-    // TODO shows up everytime user opens detailFragment ffs
     private fun subscribeToDialog() {
-//        mainViewModel.showSendMessageDialog.observe(viewLifecycleOwner) {
-//            activity?.supportFragmentManager?.let { supportFragmentManager ->
-//                SingleMessageDialog().show(
-//                    supportFragmentManager,
-//                    SingleMessageDialog.TAG
-//                )
-//            }
-//        }
+        mainViewModel.showSendMessageDialog.observe(viewLifecycleOwner) {
+            it.getContentIfNotHandled()?.let {
+                activity?.supportFragmentManager?.let { supportFragmentManager ->
+                    SingleMessageDialog().show(
+                        supportFragmentManager,
+                        SingleMessageDialog.TAG
+                    )
+                }
+            }
+        }
     }
 }

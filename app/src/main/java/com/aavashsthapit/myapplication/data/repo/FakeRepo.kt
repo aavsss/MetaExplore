@@ -6,7 +6,7 @@ import com.aavashsthapit.myapplication.data.entity.StreamerViewModel
  * Fake Repo until backend is connected
  * List of data class TwitchStreamers
  */
-object FakeRepo {
+class FakeRepo {
 
     val testStreamers = listOf(
         StreamerViewModel(display_name = "Pokimane", thumbnail_url = "https://specials-images.forbesimg.com/imageserve/5f5f55887d9eec237a586841/960x0.jpg?fit=scale", is_live = false, game_name = "Variety"),

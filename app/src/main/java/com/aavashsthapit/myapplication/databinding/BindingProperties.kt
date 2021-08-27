@@ -4,6 +4,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.aavashsthapit.myapplication.other.Extensions.gone
+import com.aavashsthapit.myapplication.other.Extensions.visible
 import com.bumptech.glide.RequestManager
 import java.text.SimpleDateFormat
 import java.util.*
@@ -23,7 +25,7 @@ class BindingProperties @Inject constructor (
 
     @BindingAdapter("app:visible_or_gone")
     fun setVisibleIfOnline(view: View, isLive: Boolean) {
-        view.visibility = if (isLive) View.VISIBLE else View.GONE
+        if (isLive) view.visible() else view.gone()
     }
 
     @BindingAdapter("app:formatted_start_date")

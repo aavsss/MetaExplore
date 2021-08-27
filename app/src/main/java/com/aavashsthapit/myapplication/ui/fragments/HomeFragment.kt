@@ -35,7 +35,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class HomeFragment @Inject constructor(
     val streamersAdapter: StreamersAdapter,
-    var mainViewModel: MainViewModel? = null
+    var mainViewModel: MainViewModel? = null,
+    val fakeRepo: FakeRepo
 ) : Fragment(R.layout.fragment_home) {
 
     @Inject
@@ -80,13 +81,11 @@ class HomeFragment @Inject constructor(
         }
 
         mainViewModel?.sendHttpRequest(twitchStreamersApi)
+
         // If the connection is not made
-//        mainViewModel?.listener = {
-//            binding.allStreamersProgressBar.isVisible = false
-//        }
         subscribeToProgressBarListener()
         // Filter based on search query
-        binding.svSearchStreamers.setOnQueryTextListener(mainViewModel?.getSearchCallback(FakeRepo.streamers))
+        binding.svSearchStreamers.setOnQueryTextListener(mainViewModel?.getSearchCallback(fakeRepo.streamers))
     }
 
     private fun setupRecyclerView() = binding.rvAllStreamers.apply {
