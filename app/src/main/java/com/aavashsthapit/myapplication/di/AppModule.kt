@@ -1,15 +1,10 @@
 package com.aavashsthapit.myapplication.di
 
 import android.content.Context
-import android.view.View
-import androidx.appcompat.widget.SearchView
 import com.aavashsthapit.myapplication.R
-import com.aavashsthapit.myapplication.adapters.StreamersAdapter
 import com.aavashsthapit.myapplication.api.TwitchStreamersApi
 import com.aavashsthapit.myapplication.data.repo.FakeRepo
-import com.aavashsthapit.myapplication.ui.fragments.StreamersFragmentFactory
 import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import dagger.Module
@@ -19,8 +14,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
-import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
@@ -55,6 +48,4 @@ object AppModule {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(TwitchStreamersApi::class.java)
-
-
 }

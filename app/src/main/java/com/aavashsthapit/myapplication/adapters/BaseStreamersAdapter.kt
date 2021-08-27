@@ -1,12 +1,13 @@
 package com.aavashsthapit.myapplication.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.aavashsthapit.myapplication.data.entity.Streamer
+import com.aavashsthapit.myapplication.databinding.ListItemBinding
 
 /**
  * Class to be inherited
@@ -17,9 +18,9 @@ import com.aavashsthapit.myapplication.data.entity.Streamer
  */
 abstract class BaseStreamersAdapter(
     private val layoutId: Int
-) : RecyclerView.Adapter<BaseStreamersAdapter.StreamerViewHolder>(){
+) : RecyclerView.Adapter<BaseStreamersAdapter.StreamerViewHolder>() {
 
-    class StreamerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    class StreamerViewHolder(itemView: ListItemBinding) : RecyclerView.ViewHolder(itemView.root)
 
     protected val diffCallback = object : DiffUtil.ItemCallback<Streamer>() {
         override fun areItemsTheSame(oldItem: Streamer, newItem: Streamer): Boolean {
@@ -32,19 +33,19 @@ abstract class BaseStreamersAdapter(
     }
 
     protected abstract val differ: AsyncListDiffer<Streamer>
-
+    protected lateinit var binding: ListItemBinding
     var streamers: List<Streamer>
         get() = differ.currentList
         set(value) = differ.submitList(value)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StreamerViewHolder {
-        return StreamerViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                layoutId,
-                parent,
-                false
-            )
+        binding = DataBindingUtil.inflate(
+            LayoutInflater.from(parent.context),
+            layoutId,
+            parent,
+            false
         )
+        return StreamerViewHolder(binding)
     }
 
     protected var onItemClickListener: ((Streamer) -> Unit)? = null

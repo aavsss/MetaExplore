@@ -31,10 +31,10 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _streamers = MutableLiveData<Resource<List<Streamer>>>()
-    val streamers : LiveData<Resource<List<Streamer>>> = _streamers
+    val streamers: LiveData<Resource<List<Streamer>>> = _streamers
 
     private val _currentStreamer = MutableLiveData<Resource<Streamer>>()
-    val currentStreamer : LiveData<Resource<Streamer>> = _currentStreamer
+    val currentStreamer: LiveData<Resource<Streamer>> = _currentStreamer
 
     lateinit var listener: (() -> Unit)
 
@@ -45,21 +45,20 @@ class MainViewModel @Inject constructor(
 
         override fun onQueryTextChange(newText: String?): Boolean {
             if (newText != null) {
-                if (newText.isNotEmpty()){
-                    val tempList : List<Streamer> = if(streamers.isEmpty()){
+                if (newText.isNotEmpty()) {
+                    val tempList: List<Streamer> = if (streamers.isEmpty()) {
                         fakeRepo.streamers.filter {
                             it.display_name.toLowerCase(Locale.ROOT).contains(newText.toLowerCase(Locale.ROOT))
                         }
-                    }else{
+                    } else {
                         streamers.filter {
                             it.display_name.toLowerCase(Locale.ROOT).contains(newText.toLowerCase(Locale.ROOT))
                         }
                     }
 
                     _streamers.postValue(Resource.success(tempList))
-
-                }else{
-                    //Show all
+                } else {
+                    // Show all
                     _streamers.postValue(Resource.success(fakeRepo.streamers))
                 }
             }
@@ -67,34 +66,34 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun setCurrentStreamer(streamer : Streamer) {
+    fun setCurrentStreamer(streamer: Streamer) {
         _currentStreamer.postValue(Resource.success(streamer))
     }
 
     fun sendHttpRequest(twitchStreamersApi: TwitchStreamersApi) {
-        if(fakeRepo.streamers.isEmpty()){
+        if (fakeRepo.streamers.isEmpty()) {
             viewModelScope.launch {
                 val response = try {
                     twitchStreamersApi.getTwitchStreamers()
-                } catch (e : IOException) {
+                } catch (e: IOException) {
                     Log.e(TAG, "IOException, you might not have internet connection ${e.localizedMessage}")
                     listener.invoke()
                     _streamers.postValue(Resource.success(fakeRepo.testStreamers))
                     return@launch
-                } catch (e : HttpException) {
+                } catch (e: HttpException) {
                     Log.e(TAG, "HttpException, unexpected response")
                     listener.invoke()
                     _streamers.postValue(Resource.success(fakeRepo.testStreamers))
                     return@launch
                 }
 
-                if(response.isSuccessful && response.body() != null) {
+                if (response.isSuccessful && response.body() != null) {
                     Log.v(TAG, "///${response.body()}")
                     response.body()?.data?.let {
                         fakeRepo.streamers = it
                         _streamers.postValue(Resource.success(it))
                     } ?: Resource.error("An unknown error occurred", null)
-                }else{
+                } else {
                     listener.invoke()
                     _streamers.postValue(Resource.success(fakeRepo.testStreamers))
                     Resource.error("An unknown error occurred", null)
@@ -104,7 +103,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun setTestStreamers(streamers : List<Streamer>) {
+    fun setTestStreamers(streamers: List<Streamer>) {
         _streamers.postValue(Resource.success(streamers))
     }
 }

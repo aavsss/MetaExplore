@@ -8,7 +8,6 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
-import com.aavashsthapit.myapplication.R
 import com.aavashsthapit.myapplication.databinding.SingleMessageDialogBinding
 import com.aavashsthapit.myapplication.ui.viewmodels.MainViewModel
 
@@ -27,13 +26,17 @@ class SingleMessageDialog : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.single_message_dialog, container, false)
+        binding = SingleMessageDialogBinding.inflate(
+            inflater,
+            container,
+            false
+        )
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
-        binding = SingleMessageDialogBinding.bind(view)
         setUpViews()
     }
 
@@ -47,12 +50,11 @@ class SingleMessageDialog : DialogFragment() {
 
     private fun setUpViews() {
         binding.apply {
-            tvTitle.text = mainViewModel.currentStreamer.value?.data?.display_name
+            viewmodel = mainViewModel
             etMessage.setText("Hey, I have a product that can boast your production in ${mainViewModel.currentStreamer.value?.data?.game_name}.")
             btnSubmit.setOnClickListener {
                 Toast.makeText(requireContext(), "Sent message", Toast.LENGTH_SHORT).show()
             }
         }
     }
-
 }

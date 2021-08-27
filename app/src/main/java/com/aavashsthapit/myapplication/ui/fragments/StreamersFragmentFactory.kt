@@ -6,11 +6,11 @@ import com.aavashsthapit.myapplication.adapters.StreamersAdapter
 import javax.inject.Inject
 
 class StreamersFragmentFactory @Inject constructor(
-        private val streamersAdapter: StreamersAdapter
+    private val streamersAdapter: StreamersAdapter
 ) : FragmentFactory() {
 
     override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
-        return when(className) {
+        return when (className) {
             HomeFragment::class.java.name -> HomeFragment(streamersAdapter)
             DetailFragment::class.java.name -> DetailFragment()
             else -> super.instantiate(classLoader, className)
