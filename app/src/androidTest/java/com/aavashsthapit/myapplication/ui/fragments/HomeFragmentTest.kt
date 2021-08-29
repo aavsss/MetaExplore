@@ -29,6 +29,7 @@ import org.mockito.Mockito.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.aavashsthapit.myapplication.getOrAwaitValueAndroidTest
+import com.aavashsthapit.myapplication.ui.fragments.homeFragment.HomeFragment
 import com.aavashsthapit.myapplication.ui.viewmodels.MainViewModel
 import com.google.common.truth.Truth.assertThat
 import org.hamcrest.Matchers.allOf

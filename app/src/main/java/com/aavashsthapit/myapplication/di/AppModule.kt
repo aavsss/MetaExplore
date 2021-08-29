@@ -30,6 +30,10 @@ object AppModule {
     @Provides
     fun provideFakeRepo() = FakeRepo()
 
+//    @Singleton
+//    @Provides
+//    fun provideRepo(): StreamerRepo = FakeRepo()
+
     @Singleton
     @Provides
     fun provideGlideInstance(

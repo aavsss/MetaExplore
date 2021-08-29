@@ -6,7 +6,7 @@ import com.aavashsthapit.myapplication.data.entity.StreamerViewModel
  * Fake Repo until backend is connected
  * List of data class TwitchStreamers
  */
-class FakeRepo {
+class FakeRepo : StreamerRepo {
 
     val testStreamers = listOf(
         StreamerViewModel(display_name = "Pokimane", thumbnail_url = "https://specials-images.forbesimg.com/imageserve/5f5f55887d9eec237a586841/960x0.jpg?fit=scale", is_live = false, game_name = "Variety"),
@@ -16,4 +16,16 @@ class FakeRepo {
         StreamerViewModel(display_name = "Ploo", thumbnail_url = "https://yt3.ggpht.com/ytc/AAUvwniu3ghHE6nZ4G2YQr0r8EeZcA6gsDm3yXQ18gON2Q=s900-c-k-c0x00ffffff-no-rj", is_live = true, game_name = "Valorant")
     )
     var streamers = listOf<StreamerViewModel>()
+
+    override fun getAllStreamers(): List<StreamerViewModel> {
+        return streamers
+    }
+
+    override fun getSelectedStreamer(): StreamerViewModel {
+        return testStreamers[0]
+    }
+
+    override fun getTestStreamersRe(): List<StreamerViewModel> {
+        return testStreamers
+    }
 }

@@ -2,7 +2,7 @@ package com.aavashsthapit.myapplication
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.SmallTest
-import com.aavashsthapit.myapplication.ui.fragments.HomeFragment
+import com.aavashsthapit.myapplication.ui.fragments.homeFragment.HomeFragment
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest

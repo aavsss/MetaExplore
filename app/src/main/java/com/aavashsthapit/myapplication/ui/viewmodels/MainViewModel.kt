@@ -12,6 +12,7 @@ import com.aavashsthapit.myapplication.data.repo.FakeRepo
 import com.aavashsthapit.myapplication.other.Constants.TAG
 import com.aavashsthapit.myapplication.other.Event
 import com.aavashsthapit.myapplication.other.Resource
+import com.aavashsthapit.myapplication.ui.fragments.homeFragment.FilterStreamers
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -28,8 +29,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    val fakeRepo: FakeRepo,
+    val fakeRepo: FakeRepo
 ) : ViewModel() {
+
+    @Inject
+    lateinit var filterStreamers: FilterStreamers
 
     private val _streamers = MutableLiveData<Resource<List<StreamerViewModel>>>()
     val streamers: LiveData<Resource<List<StreamerViewModel>>> = _streamers
@@ -43,35 +47,18 @@ class MainViewModel @Inject constructor(
     private val _progressBarListener = MutableLiveData<Resource<Unit>>()
     val progressBarListener: LiveData<Resource<Unit>> = _progressBarListener
 
-    lateinit var listener: (() -> Unit)
-
-    fun getSearchCallback(streamerViewModels: List<StreamerViewModel>) = object : SearchView.OnQueryTextListener {
+    private val _getSearchCallback = object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String?): Boolean {
             return false
         }
 
         override fun onQueryTextChange(newText: String?): Boolean {
-            if (newText != null) {
-                if (newText.isNotEmpty()) {
-                    val tempList: List<StreamerViewModel> = if (streamerViewModels.isEmpty()) {
-                        fakeRepo.streamers.filter {
-                            it.display_name.toLowerCase(Locale.ROOT).contains(newText.toLowerCase(Locale.ROOT))
-                        }
-                    } else {
-                        streamerViewModels.filter {
-                            it.display_name.toLowerCase(Locale.ROOT).contains(newText.toLowerCase(Locale.ROOT))
-                        }
-                    }
-
-                    _streamers.postValue(Resource.success(tempList))
-                } else {
-                    // Show all
-                    _streamers.postValue(Resource.success(fakeRepo.streamers))
-                }
-            }
+            _streamers.postValue(Resource.success(filterStreamers.searchStreamers(newText)))
             return false
         }
     }
+
+    val getSearchCallback: SearchView.OnQueryTextListener = _getSearchCallback
 
     fun setCurrentStreamer(streamerViewModel: StreamerViewModel) {
         _currentStreamer.postValue(Resource.success(streamerViewModel))

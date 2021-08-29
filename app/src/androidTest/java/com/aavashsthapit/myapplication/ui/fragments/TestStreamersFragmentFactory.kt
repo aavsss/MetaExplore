@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import com.aavashsthapit.myapplication.adapters.StreamersAdapter
 import com.aavashsthapit.myapplication.data.repo.FakeRepo
+import com.aavashsthapit.myapplication.ui.fragments.homeFragment.HomeFragment
 import com.aavashsthapit.myapplication.ui.viewmodels.MainViewModel
 import javax.inject.Inject
 

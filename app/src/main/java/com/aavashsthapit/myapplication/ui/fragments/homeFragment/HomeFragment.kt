@@ -1,4 +1,4 @@
-package com.aavashsthapit.myapplication.ui.fragments
+package com.aavashsthapit.myapplication.ui.fragments.homeFragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -85,7 +85,7 @@ class HomeFragment @Inject constructor(
         // If the connection is not made
         subscribeToProgressBarListener()
         // Filter based on search query
-        binding.svSearchStreamers.setOnQueryTextListener(mainViewModel?.getSearchCallback(fakeRepo.streamers))
+        binding.svSearchStreamers.setOnQueryTextListener(mainViewModel?.getSearchCallback)
     }
 
     private fun setupRecyclerView() = binding.rvAllStreamers.apply {

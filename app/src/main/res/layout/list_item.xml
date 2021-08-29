@@ -9,6 +9,10 @@
             name="viewmodel"
             type="com.aavashsthapit.myapplication.data.entity.StreamerViewModel" />
 
+        <variable
+            name="mainViewModel"
+            type="com.aavashsthapit.myapplication.ui.viewmodels.MainViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

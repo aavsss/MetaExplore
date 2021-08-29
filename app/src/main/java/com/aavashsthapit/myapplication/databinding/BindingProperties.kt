@@ -33,6 +33,11 @@ class BindingProperties @Inject constructor (
         view.text = "Start time: ${convertISOTime(startDate)}"
     }
 
+//    @BindingAdapter("app:query_change_listener")
+//    fun setQueryChangeListener(view: SearchView, listener: SearchView.OnQueryTextListener) {
+//        view.setOnQueryTextListener(listener)
+//    }
+
     private fun convertISOTime(dateString: String): String {
         val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
         val date = try {
