@@ -3,6 +3,7 @@ package com.aavashsthapit.myapplication.databinding
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.SearchView
 import androidx.databinding.BindingAdapter
 import com.aavashsthapit.myapplication.other.Extensions.gone
 import com.aavashsthapit.myapplication.other.Extensions.visible
@@ -33,10 +34,22 @@ class BindingProperties @Inject constructor (
         view.text = "Start time: ${convertISOTime(startDate)}"
     }
 
-//    @BindingAdapter("app:query_change_listener")
-//    fun setQueryChangeListener(view: SearchView, listener: SearchView.OnQueryTextListener) {
-//        view.setOnQueryTextListener(listener)
-//    }
+    @BindingAdapter("app:searchQueryListener")
+    fun searchQueryListener(view: SearchView?, callback: ((String?) -> Unit)?) {
+        val searchCallBack = object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (callback != null) {
+                    callback(newText)
+                }
+                return false
+            }
+        }
+        view?.setOnQueryTextListener(searchCallBack)
+    }
 
     private fun convertISOTime(dateString: String): String {
         val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)

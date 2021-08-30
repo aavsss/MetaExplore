@@ -1,7 +1,6 @@
 package com.aavashsthapit.myapplication.ui.viewmodels
 
 import android.util.Log
-import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -47,18 +46,9 @@ class MainViewModel @Inject constructor(
     private val _progressBarListener = MutableLiveData<Resource<Unit>>()
     val progressBarListener: LiveData<Resource<Unit>> = _progressBarListener
 
-    private val _getSearchCallback = object : SearchView.OnQueryTextListener {
-        override fun onQueryTextSubmit(query: String?): Boolean {
-            return false
-        }
-
-        override fun onQueryTextChange(newText: String?): Boolean {
-            _streamers.postValue(Resource.success(filterStreamers.searchStreamers(newText)))
-            return false
-        }
+    val vs: (String?) -> Unit = { s: String? ->
+        _streamers.postValue(Resource.success(filterStreamers.searchStreamers(s)))
     }
-
-    val getSearchCallback: SearchView.OnQueryTextListener = _getSearchCallback
 
     fun setCurrentStreamer(streamerViewModel: StreamerViewModel) {
         _currentStreamer.postValue(Resource.success(streamerViewModel))

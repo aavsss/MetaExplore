@@ -7,5 +7,5 @@ import retrofit2.http.GET
 interface TwitchStreamersApi {
 
     @GET("/twitchStreamers")
-    suspend fun getTwitchStreamers() : Response<TwitchResponse>
+    suspend fun getTwitchStreamers(): Response<TwitchResponse>
 }

@@ -1,12 +1,12 @@
 package com.aavashsthapit.myapplication.ui.fragments.homeFragment
 
 import com.aavashsthapit.myapplication.data.entity.StreamerViewModel
-import com.aavashsthapit.myapplication.data.repo.FakeRepo
+import com.aavashsthapit.myapplication.data.repo.StreamerRepo
 import java.util.*
 import javax.inject.Inject
 
 class FilterStreamersImpl @Inject constructor(
-    val repo: FakeRepo
+    val repo: StreamerRepo
 ) : FilterStreamers {
 
 //    @Inject
