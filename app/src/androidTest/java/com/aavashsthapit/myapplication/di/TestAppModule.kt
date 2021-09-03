@@ -21,7 +21,7 @@ object TestAppModule {
     @Singleton
     @Provides
     @Named("test_repo")
-    fun provideFakeRepo() = FakeRepo
+    fun provideFakeRepo() = FakeRepo()
 
     @Singleton
     @Provides

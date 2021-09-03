@@ -1,12 +1,28 @@
 package com.aavashsthapit.myapplication.data.repo
 
+import android.util.Log
+import com.aavashsthapit.myapplication.api.TwitchStreamersApi
 import com.aavashsthapit.myapplication.data.entity.StreamerViewModel
+import com.aavashsthapit.myapplication.other.Constants
+import com.aavashsthapit.myapplication.other.Resource
+import retrofit2.HttpException
+import java.io.IOException
+import javax.inject.Inject
 
 /**
  * Fake Repo until backend is connected
  * List of data class TwitchStreamers
  */
-class FakeRepo : StreamerRepo {
+class FakeRepo @Inject constructor(
+    private val twitchStreamersApi: TwitchStreamersApi,
+    private val userCache: UserCache
+) : StreamerRepo {
+
+    companion object {
+        const val MAX_RETRY_ATTEMPT = 3
+    }
+
+    private var attempts = 0
 
     val testStreamers = listOf(
         StreamerViewModel(display_name = "Pokimane", thumbnail_url = "https://specials-images.forbesimg.com/imageserve/5f5f55887d9eec237a586841/960x0.jpg?fit=scale", is_live = false, game_name = "Variety"),
@@ -27,5 +43,42 @@ class FakeRepo : StreamerRepo {
 
     override fun getTestStreamersRe(): List<StreamerViewModel> {
         return testStreamers
+    }
+
+    override suspend fun getDataFromBackend(): List<StreamerViewModel> {
+        attempts += 1
+        val cached = userCache.getCache()
+        if (cached != null) {
+            return cached
+        }
+        return try {
+            val temp = twitchStreamersApi.getTwitchStreamers()
+            return if (temp.isSuccessful && temp.body() != null) {
+                userCache.putCache(temp.body()!!.data)
+                streamers = temp.body()!!.data
+                temp.body()!!.data
+            } else {
+                testStreamers
+            }
+        } catch (e: IOException) {
+            Resource.error(e.localizedMessage ?: "Error", null)
+            Log.e(
+                Constants.TAG,
+                "IOException, you might not have internet connection ${e.localizedMessage}"
+            )
+            if (attempts < MAX_RETRY_ATTEMPT) {
+                getDataFromBackend()
+            } else {
+                throw e
+            }
+        } catch (e: HttpException) {
+            Resource.error(e.localizedMessage ?: "Error", null)
+            Log.e(Constants.TAG, "HttpException, unexpected response")
+            if (attempts < MAX_RETRY_ATTEMPT) {
+                getDataFromBackend()
+            } else {
+                throw e
+            }
+        }
     }
 }

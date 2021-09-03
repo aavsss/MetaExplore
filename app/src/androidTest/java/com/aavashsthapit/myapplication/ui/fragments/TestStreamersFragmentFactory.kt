@@ -9,14 +9,14 @@ import com.aavashsthapit.myapplication.ui.viewmodels.MainViewModel
 import javax.inject.Inject
 
 class TestStreamersFragmentFactory @Inject constructor(
-        private val streamersAdapter: StreamersAdapter
+        private val streamersAdapter: StreamersAdapter,
 ) : FragmentFactory() {
 
     override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
         return when(className) {
             HomeFragment::class.java.name -> HomeFragment(
                     streamersAdapter,
-                    MainViewModel(FakeRepo)
+                    MainViewModel(FakeRepo())
             )
             else -> super.instantiate(classLoader, className)
         }

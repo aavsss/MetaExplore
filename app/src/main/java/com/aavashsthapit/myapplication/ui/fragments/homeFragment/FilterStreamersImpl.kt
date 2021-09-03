@@ -9,13 +9,11 @@ class FilterStreamersImpl @Inject constructor(
     val repo: StreamerRepo
 ) : FilterStreamers {
 
-//    @Inject
-//    lateinit var repo: FakeRepo
-
     override fun searchStreamers(query: String?): List<StreamerViewModel> {
+        repo
         query?.let {
             return if (query.isNotEmpty()) {
-                val tempList: List<StreamerViewModel> = if (repo.getAllStreamers().isEmpty()) {
+                val tempList: List<StreamerViewModel> = if (this.repo.getAllStreamers().isEmpty()) {
                     repo.getTestStreamersRe().filter {
                         it.display_name.toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))
                     }

@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aavashsthapit.myapplication.api.TwitchStreamersApi
 import com.aavashsthapit.myapplication.data.entity.StreamerViewModel
 import com.aavashsthapit.myapplication.data.repo.FakeRepo
 import com.aavashsthapit.myapplication.other.Constants.TAG
@@ -54,15 +53,15 @@ class MainViewModel @Inject constructor(
         _currentStreamer.postValue(Resource.success(streamerViewModel))
     }
 
-    fun sendHttpRequest(twitchStreamersApi: TwitchStreamersApi) {
+    fun sendHttpRequest() {
         if (fakeRepo.streamers.isEmpty()) {
             viewModelScope.launch {
                 val response = try {
-                    twitchStreamersApi.getTwitchStreamers()
+                    fakeRepo.getDataFromBackend()
                 } catch (e: IOException) {
                     Log.e(TAG, "IOException, you might not have internet connection ${e.localizedMessage}")
                     hideProgressBar()
-                    _streamers.postValue(Resource.success(fakeRepo.testStreamers))
+                    _streamers.postValue(Resource.success(fakeRepo.testStreamers)) //show a different view here
                     return@launch
                 } catch (e: HttpException) {
                     Log.e(TAG, "HttpException, unexpected response")
@@ -71,18 +70,7 @@ class MainViewModel @Inject constructor(
                     return@launch
                 }
 
-                if (response.isSuccessful && response.body() != null) {
-                    Log.v(TAG, "///${response.body()}")
-                    response.body()?.data?.let {
-                        fakeRepo.streamers = it
-                        _streamers.postValue(Resource.success(it))
-                    } ?: Resource.error("An unknown error occurred", null)
-                } else {
-                    hideProgressBar()
-                    _streamers.postValue(Resource.success(fakeRepo.testStreamers))
-                    Resource.error("An unknown error occurred", null)
-                    Log.e(TAG, "Response not successful")
-                }
+                _streamers.postValue(Resource.success(response))
             }
         }
     }

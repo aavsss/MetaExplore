@@ -10,29 +10,30 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.MediumTest
 import com.aavashsthapit.myapplication.R
 import com.aavashsthapit.myapplication.adapters.BaseStreamersAdapter
 import com.aavashsthapit.myapplication.adapters.StreamersAdapter
 import com.aavashsthapit.myapplication.data.repo.FakeRepo
 import com.aavashsthapit.myapplication.databinding.FragmentHomeBinding
-import com.aavashsthapit.myapplication.launchFragmentInHiltContainer
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import javax.inject.Inject
-import org.mockito.Mockito.*
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
 import com.aavashsthapit.myapplication.getOrAwaitValueAndroidTest
+import com.aavashsthapit.myapplication.launchFragmentInHiltContainer
 import com.aavashsthapit.myapplication.ui.fragments.homeFragment.HomeFragment
 import com.aavashsthapit.myapplication.ui.viewmodels.MainViewModel
 import com.google.common.truth.Truth.assertThat
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.hamcrest.Matchers.allOf
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
+import javax.inject.Inject
 
 @MediumTest
 @HiltAndroidTest
@@ -46,21 +47,21 @@ class HomeFragmentTest {
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Inject
-    lateinit var streamersAdapterForPractice : StreamersAdapter
+    lateinit var streamersAdapterForPractice: StreamersAdapter
 
     @Inject
     lateinit var testFragmentFactory: TestStreamersFragmentFactory
 
     @Before
-    fun setup(){
+    fun setup() {
         hiltRule.inject()
-        streamersAdapterForPractice.streamerViewModels = FakeRepo.testStreamers
+        streamersAdapterForPractice.streamerViewModels = FakeRepo().testStreamers
     }
 
     @Test
     fun isAppNameVisible() {
         launchFragmentInHiltContainer<HomeFragment>(
-                fragmentFactory = testFragmentFactory
+            fragmentFactory = testFragmentFactory
         ) {
         }
         onView(withId(R.id.app_name)).check(matches(isDisplayed()))
@@ -69,7 +70,7 @@ class HomeFragmentTest {
     @Test
     fun isSearchViewVisible() {
         launchFragmentInHiltContainer<HomeFragment>(
-                fragmentFactory = testFragmentFactory
+            fragmentFactory = testFragmentFactory
         ) {
         }
         onView(withId(R.id.sv_search_streamers)).check(matches(isDisplayed()))
@@ -78,7 +79,7 @@ class HomeFragmentTest {
     @Test
     fun isCategoryNameVisible() {
         launchFragmentInHiltContainer<HomeFragment>(
-                fragmentFactory = testFragmentFactory
+            fragmentFactory = testFragmentFactory
         ) {
         }
         onView(withId(R.id.tv_category)).check(matches(isDisplayed()))
@@ -87,16 +88,16 @@ class HomeFragmentTest {
     @Test
     fun isRecyclerViewVisible() {
         launchFragmentInHiltContainer<HomeFragment>(
-                fragmentFactory = testFragmentFactory
+            fragmentFactory = testFragmentFactory
         ) {
             streamersAdapter.apply {
-                streamerViewModels = FakeRepo.testStreamers
+                streamerViewModels = FakeRepo().testStreamers
             }
 
-            binding = FragmentHomeBinding.bind(requireView()) //viewBinding
+            binding = FragmentHomeBinding.bind(requireView()) // viewBinding
             binding.rvAllStreamers.apply {
                 adapter = streamersAdapter
-                layoutManager = LinearLayoutManager(requireContext()) //requireContext error here?
+                layoutManager = LinearLayoutManager(requireContext()) // requireContext error here?
             }
         }
         onView(withId(R.id.rv_all_streamers)).check(matches(isDisplayed()))
@@ -105,40 +106,40 @@ class HomeFragmentTest {
     @Test
     fun scrollingInRecyclerView() {
         launchFragmentInHiltContainer<HomeFragment>(
-                fragmentFactory = testFragmentFactory
+            fragmentFactory = testFragmentFactory
         ) {
             streamersAdapter.apply {
-                streamerViewModels = FakeRepo.testStreamers
+                streamerViewModels = FakeRepo().testStreamers
             }
 
-            binding = FragmentHomeBinding.bind(requireView()) //viewBinding
+            binding = FragmentHomeBinding.bind(requireView()) // viewBinding
             binding.rvAllStreamers.apply {
                 adapter = streamersAdapter
-                layoutManager = LinearLayoutManager(requireContext()) //requireContext error here?
+                layoutManager = LinearLayoutManager(requireContext()) // requireContext error here?
             }
         }
 
         onView(withId(R.id.rv_all_streamers))
-                .perform(
-                        RecyclerViewActions.scrollToPosition<BaseStreamersAdapter.StreamerViewHolder>(
-                                0
-                        )
+            .perform(
+                RecyclerViewActions.scrollToPosition<BaseStreamersAdapter.StreamerViewHolder>(
+                    0
                 )
+            )
     }
 
     @Test
     fun correctTextViewsDisplayed_pass() {
         launchFragmentInHiltContainer<HomeFragment>(
-                fragmentFactory = testFragmentFactory
+            fragmentFactory = testFragmentFactory
         ) {
             streamersAdapter.apply {
-                streamerViewModels = FakeRepo.testStreamers
+                streamerViewModels = FakeRepo().testStreamers
             }
 
-            binding = FragmentHomeBinding.bind(requireView()) //viewBinding
+            binding = FragmentHomeBinding.bind(requireView()) // viewBinding
             binding.rvAllStreamers.apply {
                 adapter = streamersAdapter
-                layoutManager = LinearLayoutManager(requireContext()) //requireContext error here?
+                layoutManager = LinearLayoutManager(requireContext()) // requireContext error here?
             }
         }
 
@@ -148,98 +149,97 @@ class HomeFragmentTest {
     }
 
     @Test
-    fun homeFragment_navigate_to_DetailFragment(){
-        //Mocking navController
+    fun homeFragment_navigate_to_DetailFragment() {
+        // Mocking navController
         val navController = mock(NavController::class.java)
 
-        //Launching Fragment contained in Hilt
+        // Launching Fragment contained in Hilt
         launchFragmentInHiltContainer<HomeFragment>(
-                fragmentFactory = testFragmentFactory
+            fragmentFactory = testFragmentFactory
         ) {
 
-            //Populating streamers. Was having error here when it was above launch Fragment
+            // Populating streamers. Was having error here when it was above launch Fragment
             streamersAdapter.apply {
-                streamerViewModels = FakeRepo.testStreamers
+                streamerViewModels = FakeRepo().testStreamers
             }
 
-            //Instantiating binding
-            binding = FragmentHomeBinding.bind(requireView()) //viewBinding
+            // Instantiating binding
+            binding = FragmentHomeBinding.bind(requireView()) // viewBinding
             binding.rvAllStreamers.apply {
                 adapter = streamersAdapter
-                layoutManager = LinearLayoutManager(requireContext()) //requireContext error here?
+                layoutManager = LinearLayoutManager(requireContext()) // requireContext error here?
             }
 
-            //Setting mock nav controller
+            // Setting mock nav controller
             Navigation.setViewNavController(
-                    requireView(),
-                    navController
+                requireView(),
+                navController
             )
         }
 
-        //Mock click on recyclerView
+        // Mock click on recyclerView
         onView(withId(R.id.rv_all_streamers))
-                .perform(
-                        RecyclerViewActions.actionOnItemAtPosition<BaseStreamersAdapter.StreamerViewHolder>(
-                                2,
-                                click()
-                        )
+            .perform(
+                RecyclerViewActions.actionOnItemAtPosition<BaseStreamersAdapter.StreamerViewHolder>(
+                    2,
+                    click()
                 )
+            )
 
-        //Verify that we navigated to the correct place
+        // Verify that we navigated to the correct place
         verify(navController).navigate(
-                R.id.action_homeFragment_to_detailFragment
+            R.id.action_homeFragment_to_detailFragment
         )
     }
 
     @Test
     fun correctImageDisplayedInView() {
         val imageUrl = "https://specials-images.forbesimg.com/imageserve/5f5f55887d9eec237a586841/960x0.jpg?fit=scale"
-        //Need to write a Fragment Factory class to perform this
+        // Need to write a Fragment Factory class to perform this
         var testViewModel: MainViewModel? = null
         launchFragmentInHiltContainer<HomeFragment>(
-                fragmentFactory = testFragmentFactory
+            fragmentFactory = testFragmentFactory
         ) {
             testViewModel = mainViewModel
-            testViewModel?.setTestStreamers(FakeRepo.testStreamers)
+            testViewModel?.setTestStreamers(FakeRepo().testStreamers)
             streamersAdapter.apply {
-                streamerViewModels = FakeRepo.testStreamers
+                streamerViewModels = FakeRepo().testStreamers
             }
 
-            //Instantiating binding
-            binding = FragmentHomeBinding.bind(requireView()) //viewBinding
+            // Instantiating binding
+            binding = FragmentHomeBinding.bind(requireView()) // viewBinding
             binding.rvAllStreamers.apply {
                 adapter = streamersAdapter
-                layoutManager = LinearLayoutManager(requireContext()) //requireContext error here?
+                layoutManager = LinearLayoutManager(requireContext()) // requireContext error here?
             }
         }
 
         assertThat(testViewModel?.streamers?.getOrAwaitValueAndroidTest()?.data?.get(0)?.thumbnail_url).contains(imageUrl)
-
     }
 
     @Test
     fun testingSearchCallback() {
-        //Need to write a Fragment Factory class to perform this
+        // Need to write a Fragment Factory class to perform this
         var testViewModel: MainViewModel? = null
         launchFragmentInHiltContainer<HomeFragment>(
-                fragmentFactory = testFragmentFactory
+            fragmentFactory = testFragmentFactory
         ) {
             testViewModel = mainViewModel
             streamersAdapter.apply {
-                streamerViewModels = FakeRepo.testStreamers
+                streamerViewModels = FakeRepo().testStreamers
             }
 
-            //Instantiating binding
-            binding = FragmentHomeBinding.bind(requireView()) //viewBinding
+            // Instantiating binding
+            binding = FragmentHomeBinding.bind(requireView()) // viewBinding
             binding.rvAllStreamers.apply {
                 adapter = streamersAdapter
-                layoutManager = LinearLayoutManager(requireContext()) //requireContext error here?
+                layoutManager = LinearLayoutManager(requireContext()) // requireContext error here?
             }
-            binding.svSearchStreamers.setOnQueryTextListener(testViewModel?.getSearchCallback(FakeRepo.testStreamers))
+//            binding.svSearchStreamers.setOnQueryTextListener(testViewModel?.getSearchCallback(FakeRepo.testStreamers))
         }
 
         onView(withId(R.id.sv_search_streamers)).perform(
-                typeSearchViewText("poki")
+            typeSearchViewText("poki")
         )
 
         println(testViewModel?.streamers?.getOrAwaitValueAndroidTest()?.data)
@@ -261,7 +261,4 @@ class HomeFragmentTest {
             }
         }
     }
-
-
-
 }

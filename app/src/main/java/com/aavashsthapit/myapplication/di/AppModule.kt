@@ -3,7 +3,6 @@ package com.aavashsthapit.myapplication.di
 import android.content.Context
 import com.aavashsthapit.myapplication.R
 import com.aavashsthapit.myapplication.api.TwitchStreamersApi
-import com.aavashsthapit.myapplication.data.repo.FakeRepo
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -25,14 +24,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
-    @Singleton
-    @Provides
-    fun provideFakeRepo() = FakeRepo()
-
-//    @Singleton
-//    @Provides
-//    fun provideRepo(): StreamerRepo = FakeRepo()
 
     @Singleton
     @Provides

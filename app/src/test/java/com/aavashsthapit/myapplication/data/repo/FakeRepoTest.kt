@@ -1,27 +1,27 @@
 package com.aavashsthapit.myapplication.data.repo
 
 import com.aavashsthapit.myapplication.data.entity.StreamerViewModel
+import com.google.common.truth.Truth.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import com.google.common.truth.Truth.assertThat
 
 class FakeRepoTest {
 
-    private lateinit var listOfStreamerViewModels : List<StreamerViewModel>
+    private lateinit var listOfStreamerViewModels: List<StreamerViewModel>
 
     @Before
-    fun setup(){
-        listOfStreamerViewModels = FakeRepo.testStreamers
+    fun setup() {
+        listOfStreamerViewModels = FakeRepo().testStreamers
     }
 
     @After
-    fun teardown(){
+    fun teardown() {
         listOfStreamerViewModels = listOf()
     }
 
     @Test
-    fun `5 streamers in list`(){
+    fun `5 streamers in list`() {
         assertThat(listOfStreamerViewModels).contains(StreamerViewModel(display_name = "Pokimane", thumbnail_url =  "https://specials-images.forbesimg.com/imageserve/5f5f55887d9eec237a586841/960x0.jpg?fit=scale", is_live = false, game_name = "Variety"))
         assertThat(listOfStreamerViewModels).contains(StreamerViewModel(display_name = "TenZ", thumbnail_url = "https://liquipedia.net/commons/images/c/c2/TenZ_%40_EPL_S10_Americas.jpg", is_live = true, game_name = "Valorant"))
         assertThat(listOfStreamerViewModels).contains(StreamerViewModel(display_name = "Sykkuno", thumbnail_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Sykkuno_2020.jpg/220px-Sykkuno_2020.jpg", is_live = false , game_name = "Variety"))

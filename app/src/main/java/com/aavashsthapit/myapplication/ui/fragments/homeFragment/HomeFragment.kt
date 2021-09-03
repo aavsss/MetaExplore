@@ -8,7 +8,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.aavashsthapit.myapplication.R
 import com.aavashsthapit.myapplication.adapters.StreamersAdapter
 import com.aavashsthapit.myapplication.api.TwitchStreamersApi
@@ -34,13 +33,14 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class HomeFragment @Inject constructor(
     val streamersAdapter: StreamersAdapter,
-    var mainViewModel: MainViewModel? = null
 ) : Fragment(R.layout.fragment_home) {
 
     @Inject
     lateinit var twitchStreamersApi: TwitchStreamersApi
 
     lateinit var binding: FragmentHomeBinding
+
+    private var mainViewModel: MainViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -79,7 +79,7 @@ class HomeFragment @Inject constructor(
             }
         }
 
-        mainViewModel?.sendHttpRequest(twitchStreamersApi)
+        mainViewModel?.sendHttpRequest()
 
         // If the connection is not made
         subscribeToProgressBarListener()
@@ -87,7 +87,6 @@ class HomeFragment @Inject constructor(
 
     private fun setupRecyclerView() = binding.rvAllStreamers.apply {
         adapter = streamersAdapter
-        layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun subscribeStreamAdapterToFakeRepo() {
