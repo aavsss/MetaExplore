@@ -8,11 +8,13 @@ import com.aavashsthapit.myapplication.other.Resource
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Fake Repo until backend is connected
  * List of data class TwitchStreamers
  */
+@Singleton
 class FakeRepo @Inject constructor(
     private val twitchStreamersApi: TwitchStreamersApi,
     private val userCache: UserCache
