@@ -39,10 +39,6 @@ class FakeRepo @Inject constructor(
         return streamers
     }
 
-    override fun getSelectedStreamer(): StreamerViewModel {
-        return testStreamers[0]
-    }
-
     override fun getTestStreamersRe(): List<StreamerViewModel> {
         return testStreamers
     }

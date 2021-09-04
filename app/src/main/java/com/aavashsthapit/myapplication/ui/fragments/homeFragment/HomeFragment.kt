@@ -31,9 +31,7 @@ import javax.inject.Inject
  * IOException, you might not have internet connection timeout
  */
 @AndroidEntryPoint
-class HomeFragment @Inject constructor(
-    val streamersAdapter: StreamersAdapter,
-) : Fragment(R.layout.fragment_home) {
+class HomeFragment @Inject constructor() : Fragment(R.layout.fragment_home) {
 
     @Inject
     lateinit var twitchStreamersApi: TwitchStreamersApi
@@ -41,6 +39,7 @@ class HomeFragment @Inject constructor(
     lateinit var binding: FragmentHomeBinding
 
     private var mainViewModel: MainViewModel? = null
+    private lateinit var streamersAdapter: StreamersAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,20 +55,23 @@ class HomeFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainViewModel = mainViewModel ?: ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+        streamersAdapter = StreamersAdapter({
+            mainViewModel?.onStreamerClicked(it)
+        }, {
+            mainViewModel?.onLongStreamerClicked(it)
+        })
         setupRecyclerView()
         subscribeStreamAdapterToFakeRepo()
         binding.viewmodel = mainViewModel
 
         streamersAdapter.apply {
             setItemClickListener {
-                mainViewModel?.setCurrentStreamer(it)
                 findNavController().navigate(
                     R.id.action_homeFragment_to_detailFragment
                 )
             }
 
             setItemLongClickListener {
-                it.expanded = !it.expanded
                 this.notifyItemChanged(
                     streamerViewModels.indexOfFirst { streamer ->
                         streamer.display_name == it.display_name
@@ -78,6 +80,7 @@ class HomeFragment @Inject constructor(
                 return@setItemLongClickListener true
             }
         }
+        subscribeToNavigatingToDetails()
 
         mainViewModel?.sendHttpRequest()
 
@@ -100,5 +103,13 @@ class HomeFragment @Inject constructor(
         mainViewModel?.progressBarListener?.observe(viewLifecycleOwner) {
             binding.allStreamersProgressBar.isVisible = false
         }
+    }
+
+    private fun subscribeToNavigatingToDetails() {
+//        mainViewModel?.navigateToDetails?.observe(viewLifecycleOwner) {
+//            findNavController().navigate(
+//                R.id.action_homeFragment_to_detailFragment
+//            )
+//        }
     }
 }

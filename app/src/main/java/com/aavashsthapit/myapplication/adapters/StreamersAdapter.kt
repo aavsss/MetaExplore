@@ -2,8 +2,7 @@ package com.aavashsthapit.myapplication.adapters
 
 import androidx.recyclerview.widget.AsyncListDiffer
 import com.aavashsthapit.myapplication.R
-import com.bumptech.glide.RequestManager
-import javax.inject.Inject
+import com.aavashsthapit.myapplication.data.entity.StreamerViewModel
 
 /**
  * Adapter class
@@ -12,8 +11,9 @@ import javax.inject.Inject
  * ViewBinding to populate fields such as name and category
  * setting on OnClickListener so that it will send the streamer, the user clicked
  */
-class StreamersAdapter @Inject constructor(
-    private val glide: RequestManager
+class StreamersAdapter(
+    val clickListener: (StreamerViewModel) -> Unit,
+    val longClickListener: (StreamerViewModel) -> Unit
 ) : BaseStreamersAdapter(R.layout.list_item) {
 
     override val differ = AsyncListDiffer(this, diffCallback)
@@ -29,13 +29,14 @@ class StreamersAdapter @Inject constructor(
             setOnClickListener {
                 onItemClickListener?.let { click ->
                     click(streamer) // Passing streamer here
+                    clickListener(streamer)
                 }
             }
 
             setOnLongClickListener {
+                longClickListener(streamer)
                 onItemLongClickListener(streamer)
             }
         }
     }
 }
-

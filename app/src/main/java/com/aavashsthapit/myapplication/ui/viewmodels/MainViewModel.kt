@@ -1,13 +1,11 @@
 package com.aavashsthapit.myapplication.ui.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aavashsthapit.myapplication.data.entity.StreamerViewModel
 import com.aavashsthapit.myapplication.data.repo.FakeRepo
-import com.aavashsthapit.myapplication.other.Constants.TAG
 import com.aavashsthapit.myapplication.other.Event
 import com.aavashsthapit.myapplication.other.Resource
 import com.aavashsthapit.myapplication.ui.fragments.homeFragment.FilterStreamers
@@ -45,6 +43,10 @@ class MainViewModel @Inject constructor(
     private val _progressBarListener = MutableLiveData<Resource<Unit>>()
     val progressBarListener: LiveData<Resource<Unit>> = _progressBarListener
 
+    private val _navigateToDetails = MutableLiveData<Unit?>()
+    val navigateToDetails
+        get() = _navigateToDetails
+
     val vs: (String?) -> Unit = { s: String? ->
         _streamers.postValue(Resource.success(filterStreamers.searchStreamers(s)))
     }
@@ -59,12 +61,10 @@ class MainViewModel @Inject constructor(
                 val response = try {
                     fakeRepo.getDataFromBackend()
                 } catch (e: IOException) {
-                    Log.e(TAG, "IOException, you might not have internet connection ${e.localizedMessage}")
                     hideProgressBar()
                     _streamers.postValue(Resource.success(fakeRepo.testStreamers)) //show a different view here
                     return@launch
                 } catch (e: HttpException) {
-                    Log.e(TAG, "HttpException, unexpected response")
                     hideProgressBar()
                     _streamers.postValue(Resource.success(fakeRepo.testStreamers))
                     return@launch
@@ -85,5 +85,18 @@ class MainViewModel @Inject constructor(
 
     fun hideProgressBar() {
         _progressBarListener.postValue(Resource.success(Unit))
+    }
+
+    fun onStreamerClicked(streamer: StreamerViewModel) {
+        _navigateToDetails.value = Unit
+        _currentStreamer.value = Resource.success(streamer)
+    }
+
+    fun onLongStreamerClicked(streamer: StreamerViewModel) {
+        streamer.expanded = !streamer.expanded
+    }
+
+    fun onDetailsNavigated() {
+        _navigateToDetails.value = null
     }
 }
