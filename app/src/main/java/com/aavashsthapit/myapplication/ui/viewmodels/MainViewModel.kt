@@ -43,10 +43,6 @@ class MainViewModel @Inject constructor(
     private val _progressBarListener = MutableLiveData<Resource<Unit>>()
     val progressBarListener: LiveData<Resource<Unit>> = _progressBarListener
 
-    private val _navigateToDetails = MutableLiveData<Unit?>()
-    val navigateToDetails
-        get() = _navigateToDetails
-
     val vs: (String?) -> Unit = { s: String? ->
         _streamers.postValue(Resource.success(filterStreamers.searchStreamers(s)))
     }
@@ -62,7 +58,7 @@ class MainViewModel @Inject constructor(
                     fakeRepo.getDataFromBackend()
                 } catch (e: IOException) {
                     hideProgressBar()
-                    _streamers.postValue(Resource.success(fakeRepo.testStreamers)) //show a different view here
+                    _streamers.postValue(Resource.success(fakeRepo.testStreamers)) // show a different view here
                     return@launch
                 } catch (e: HttpException) {
                     hideProgressBar()
@@ -87,16 +83,11 @@ class MainViewModel @Inject constructor(
         _progressBarListener.postValue(Resource.success(Unit))
     }
 
-    fun onStreamerClicked(streamer: StreamerViewModel) {
-        _navigateToDetails.value = Unit
+    fun settleCurrentStreamerTo(streamer: StreamerViewModel) {
         _currentStreamer.value = Resource.success(streamer)
     }
 
-    fun onLongStreamerClicked(streamer: StreamerViewModel) {
+    fun expandFieldOf(streamer: StreamerViewModel) {
         streamer.expanded = !streamer.expanded
-    }
-
-    fun onDetailsNavigated() {
-        _navigateToDetails.value = null
     }
 }

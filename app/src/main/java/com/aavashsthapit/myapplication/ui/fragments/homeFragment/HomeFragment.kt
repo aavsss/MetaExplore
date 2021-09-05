@@ -17,19 +17,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 /**
- * Uses ViewBinding
+ * Uses DataBinding
  * Uses mainViewModel
  * Sets up Home Fragment with recyclerView and
  *         streamersAdapter
  * Uses onClickListener here where data is provided from StreamersAdapter
- * Uses setOnTextChangeQueryListener for search feature
- * streamersAdapter.streamers instantiated here in subScribeToFakeRepo
  */
 
-/**
- * Error log bothering
- * IOException, you might not have internet connection timeout
- */
 @AndroidEntryPoint
 class HomeFragment @Inject constructor() : Fragment(R.layout.fragment_home) {
 
@@ -56,31 +50,15 @@ class HomeFragment @Inject constructor() : Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
         mainViewModel = mainViewModel ?: ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
         streamersAdapter = StreamersAdapter({
-            mainViewModel?.onStreamerClicked(it)
+            mainViewModel?.settleCurrentStreamerTo(it)
         }, {
-            mainViewModel?.onLongStreamerClicked(it)
+            mainViewModel?.expandFieldOf(it)
         })
         setupRecyclerView()
         subscribeStreamAdapterToFakeRepo()
         binding.viewmodel = mainViewModel
 
-        streamersAdapter.apply {
-            setItemClickListener {
-                findNavController().navigate(
-                    R.id.action_homeFragment_to_detailFragment
-                )
-            }
-
-            setItemLongClickListener {
-                this.notifyItemChanged(
-                    streamerViewModels.indexOfFirst { streamer ->
-                        streamer.display_name == it.display_name
-                    }
-                )
-                return@setItemLongClickListener true
-            }
-        }
-        subscribeToNavigatingToDetails()
+        setClickListenersOfAdapter()
 
         mainViewModel?.sendHttpRequest()
 
@@ -105,11 +83,22 @@ class HomeFragment @Inject constructor() : Fragment(R.layout.fragment_home) {
         }
     }
 
-    private fun subscribeToNavigatingToDetails() {
-//        mainViewModel?.navigateToDetails?.observe(viewLifecycleOwner) {
-//            findNavController().navigate(
-//                R.id.action_homeFragment_to_detailFragment
-//            )
-//        }
+    private fun setClickListenersOfAdapter() {
+        streamersAdapter.apply {
+            setItemClickListener {
+                findNavController().navigate(
+                    R.id.action_homeFragment_to_detailFragment
+                )
+            }
+
+            setItemLongClickListener {
+                this.notifyItemChanged(
+                    streamerViewModels.indexOfFirst { streamer ->
+                        streamer.display_name == it.display_name
+                    }
+                )
+                return@setItemLongClickListener true
+            }
+        }
     }
 }
